@@ -447,7 +447,7 @@ if (isset($user_id) && !empty($user_id)) {
                     <div class='col-xs-12 col-md-6 col-lg-8'>
                         <div class='panel'>
                             <div class='next-round'>
-                                <p class='h4 text-light'> Next Round starts at <?= date('H:00:00'); ?></p>
+                                <p class='h4 text-light'> Next Round starts at <span id='timer'><?= date('H:i:s'); ?></span></p>
                             </div>
                             <div class='d-flex justify-content-center bg-light rounded'>
                                 <div class='w50- m-4 ms-0 me-0 btn-light' style='border-top-left-radius:10px;border-bottom-left-radius:10px;'>
@@ -560,19 +560,19 @@ if (isset($user_id) && !empty($user_id)) {
     </section>
     <section id='footer'>
         <div class='w-100 mt-5' style='display:flex;'>
-            <div class='text-center p-1 bg_dark w-25 my_modal' btn='activity_btn' data-bs-toggle="modal" data-bs-target="#exampleModal">
+            <div class='text-center p-1 w-25 my_modal' style="background-color: #111a1c;" btn='activity_btn' data-bs-toggle="modal" data-bs-target="#exampleModal">
                 <i style='color:#f2f2f2' data-feather="activity"></i><br>
                 <span class='small' style='font-size:12px;color:#a3b0bb'>Activity</span>
             </div>
-            <div class='text-center p-1 bg_dark w-25 my_modal' btn='fairness_btn' data-bs-toggle="modal" data-bs-target="#exampleModal">
+            <div class='text-center p-1 w-25 my_modal' style="background-color: #111a1c;" btn='fairness_btn' data-bs-toggle="modal" data-bs-target="#exampleModal">
                 <i style='color:#f2f2f2' data-feather="clipboard"></i><br>
                 <span class='small' style='font-size:12px;color:#a3b0bb'>Fairness</span>
             </div>
-            <div class='text-center p-1 bg_dark w-25 my_modal' btn='wallet_btn' data-bs-toggle="modal" data-bs-target="#exampleModal">
+            <div class='text-center p-1 w-25 my_modal' style="background-color: #111a1c;" btn='wallet_btn' data-bs-toggle="modal" data-bs-target="#exampleModal">
                 <i style='color:#f2f2f2' data-feather="credit-card"></i><br>
                 <span class='small' style='font-size:12px;color:#a3b0bb'>Wallet</span>
             </div>
-            <div class='text-center p-1 bg_dark w-25 my_modal' btn='support_btn' data-bs-toggle="modal" data-bs-target="#exampleModal">
+            <div class='text-center p-1 w-25 my_modal' style="background-color: #111a1c;" btn='support_btn' data-bs-toggle="modal" data-bs-target="#exampleModal">
                 <i style='color:#f2f2f2' data-feather="headphones"></i><br>
                 <span class='small' style='font-size:12px;color:#a3b0bb'>Support</span>
             </div>
@@ -714,6 +714,8 @@ if (isset($user_id) && !empty($user_id)) {
     </section>
     <script>
         $(document).ready(function() {
+            setInterval(timer, 1000);
+
             $('.even').click(function() {
                 $('.even').css('border', '4px solid red');
                 $('.odd').css('border', '4px solid #254852');
@@ -918,6 +920,13 @@ if (isset($user_id) && !empty($user_id)) {
                 $('#total').val($(this).val());
             });
         });
+        
+        function timer(){
+            var timer = $('#timer').html();
+            timer = $('#timer').html() - 60;
+            $('#timer').html(timer);
+            console.log(timer);
+        }
     </script>
 </body>
 
