@@ -12,34 +12,50 @@ class Game extends BaseController
             'total' => '3',
         );
         $this->db->table('rolls')->insert($arr);
-        echo 'roll';exit;
+        // echo 'roll';exit;
         return view('index');
     }
-    
+
     public function bet()
     {
+        //check if amount is greater than user alance 
         $userid = $this->session->get('user_id');
+        $betamount = $_POST['amount'];
+        $user_balance = $this->db->table('coin')->where('user_id', $userid)->get()->getResultArray();
+
+        if ($betamount == 0 || $betamount == '') {
+            $json['result'] = 300;
+            return $this->response->setJSON($json);
+        } else if ($betamount > $user_balance[0]['coins']) {
+            $json['result'] = 400;
+            return $this->response->setJSON($json);
+        }
+
+        //place bet
         $date = date('Y-m-d');
         $time = date('H');
-        $exist = $this->db->table('bets')->where('user_id',$userid)->where('date',$date)->where('time',$time)->countAllResults();
-        // if($exist > 0 ){
-        //     $json['result'] = 400;
-        //     $json['msg'] = 'Already Placed a bet for this round';
-        //     return $this->response->setJSON($json);
-        // }
-        
+        $exist = $this->db->table('bets')->where('user_id', $userid)->where('date', $date)->where('time', $time)->countAllResults();
+
         $arr = array(
-            'total' => $_POST['total'],
+            'betoption' => $_POST['betoption'],
             'amount' => $_POST['amount'],
             'time' => $time,
             'user_id' => $userid,
         );
 
-        $json['result'] = 400;
-        if($this->db->table('bets')->insert($arr)){
+        if ($this->db->table('bets')->insert($arr)) {
             $json['result'] = 200;
-            $json['msg'] = 'bet placed succesfully';
         }
+
+        //debit amount from user 
+        $updated_user_balance = $user_balance[0]['coins'] - $betamount;
+        $updated_balance['coins'] = $updated_user_balance;
+        
+        if($this->db->table('coin')->set($updated_balance)->where('user_id', $userid)->update()){
+            $json['result'] = 200;
+            $json['user_balance'] = $updated_user_balance;
+        }
+
         return $this->response->setJSON($json);
     }
 }

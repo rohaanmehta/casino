@@ -415,7 +415,7 @@ if (isset($user_id) && !empty($user_id)) {
                     <!-- <i class="ms-1 fa fa-dollar" style="font-size:20px;color:#a3b0bb;"></i>  -->
                     <img src='<?= base_url('public/images/cash3.png') ?>' class='img-responsive p-0 coins' />
                 </span>
-                <input type="text" class="text-blue mt-2 mb-2 btn form-control" readonly value='<?php if (isset($coins)) {
+                <input type="text" class="text-blue mt-2 mb-2 btn form-control user_coins" readonly value='<?php if (isset($coins)) {
                                                                                                     echo $coins;
                                                                                                 } ?>'>
             </div>
@@ -441,9 +441,9 @@ if (isset($user_id) && !empty($user_id)) {
     </section>
     <section id='body'>
         <div class='container'>
-            <form id='bet_form' class='p-0 col-xs-10 bg'>
+            <!-- <form id='bet_form' class='p-0 col-xs-10 bg'> -->
                 <!-- //new above  -->
-                <div class='row m-3'>
+                <div class='row m-3 bg col-xs-10 bg p-1 pt-3'>
                     <div class='col-xs-12 col-md-6 col-lg-8'>
                         <div class='panel'>
                             <div class='next-round'>
@@ -462,7 +462,7 @@ if (isset($user_id) && !empty($user_id)) {
                                 <!-- <div class='d-flex p-0 col-12'> -->
                                 <div class='row m-0'>
                                     <div class='col-4 p-1'>
-                                        <input type='text' onkeypress="return event.charCode >= 48 && event.charCode <= 57" class='mb-1 form-control w-100 amount_btn' placeholder='AMOUNT' id='bet' />
+                                        <input type='text' onkeypress="return event.charCode >= 48 && event.charCode <= 57" class='mb-1 form-control w-100 amount_btn' placeholder='AMOUNT' id='amount' />
                                         <input type='text' readonly style='background:#10242a' id='win' placeholder='WIN' class='mb-1 form-control w-100 amount_btn' />
                                     </div>
 
@@ -489,7 +489,8 @@ if (isset($user_id) && !empty($user_id)) {
                                 <div class='row m-0 mt-1 p-1'>
                                     <!-- <input type="range" class="form-range slider" min="2" max="12" step="1" id="customRange3"> -->
                                     <!-- <button class='text-white btn bet_btn'>BET</button> -->
-                                    <a href="#" class='butn butn__new btn w-100'><span>PLACE BET</span></a>
+                                    <a href="" class='butn butn__new w-100'><span>PLACE BET</span></a>
+                                    <!-- <button class='butn btn butn__new w-100'>PLACE BET</button> -->
                                 </div>
                             </div>
                         </div>
@@ -555,7 +556,7 @@ if (isset($user_id) && !empty($user_id)) {
                         </div>
                     </div>
                 </div>
-            </form>
+            <!-- </form> -->
     </section>
     <section id='footer'>
         <div class='w-100 mt-5' style='display:flex;'>
@@ -716,12 +717,12 @@ if (isset($user_id) && !empty($user_id)) {
             $('.even').click(function() {
                 $('.even').css('border', '4px solid red');
                 $('.odd').css('border', '4px solid #254852');
-                $('#bet-option').val('even');
+                $('#bet-option').val('EVEN');
             });
             $('.odd').click(function() {
                 $('.odd').css('border', '4px solid red');
                 $('.even').css('border', '4px solid #254852');
-                $('#bet-option').val('odd');
+                $('#bet-option').val('ODD');
             });
 
             $('#bet').keyup(function() {
@@ -734,14 +735,15 @@ if (isset($user_id) && !empty($user_id)) {
 
             $('.reset').click(function() {
                 $('#win').val('');
-                $('#bet').val('');
+                $('#amount').val('');
                 $('.even').css('border', '4px solid #254852');
                 $('.odd').css('border', '4px solid #254852');
                 $('#bet-option').val('');
             });
 
-            $('#bet_form').submit(function(e) {
+            $('.butn__new').click(function(e) {
                 e.preventDefault();
+                // alert();
                 <?php if (!isset($user_id)) { ?>
                     let modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('exampleModal')) // Returns a Bootstrap modal instance
                     modal.show();
@@ -755,20 +757,33 @@ if (isset($user_id) && !empty($user_id)) {
                     $('.modal-title').html('Login');
                     // alert();
                 <?php } else { ?>
+
+                    if($('#bet-option').val() == ''){
+                        alert('value not selected');
+                        return true;
+                    }
+
                     $.ajax({
                         type: "POST",
                         url: "<?= base_url('bet') ?>",
                         data: {
                             amount: $('#amount').val(),
-                            total: $('#total').val(),
+                            betoption: $('#bet-option').val(),
                         },
                         cache: false,
                         dataType: "json",
                         success: function(data) {
-                            if (data.result == 200) {
-                                // alert(data.msg);
+                            if (data.result == 400) {
+                                alert('insufficient balance');
+                                return true;
+                            }else if (data.result == 300) {
+                                alert('amount must be greater than 0');
+                                return true;
+                            }else if(data.result == 200){
+                                alert('bet placed succesfully');
+                                $('.user_coins').val(data.user_balance);
+                                $('.reset').trigger('click');
                             }
-                            alert(data.msg);
                         }
                     });
                 <?php } ?>
