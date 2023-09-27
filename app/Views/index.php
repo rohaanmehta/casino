@@ -728,9 +728,12 @@ if (isset($user_id) && !empty($user_id)) {
     </section>
 
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script type="text/javascript" src="<?= base_url('/assets/js/moment.js'); ?>"></script>
+    
     <script>
         $(document).ready(function() {
-            // setInterval(timer, 1000);
+            setInterval(timer, 1000);
+
             $('.even').click(function() {
                 $('.even').css('border', '4px solid red');
                 $('.odd').css('border', '4px solid #254852');
@@ -937,10 +940,22 @@ if (isset($user_id) && !empty($user_id)) {
         });
 
         function timer() {
-            var timer = $('#timer').html();
-            timer = $('#timer').html() - 60;
-            $('#timer').html(timer);
-            console.log(timer);
+            var dt = new Date();
+            var time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
+
+            // console.log(dt.getHours());
+            if(dt.getHours() >= 18){
+                //time difference for next date
+                // var nextday = dt.getDate();
+                // var nextday =  moment().add('days', 1).format('L');
+                // nextday = nextday+' 18:00:00';
+
+                var new_time = 29 - dt.getHours();
+                console.log(new_time);
+
+            }else{
+                console.log(time);
+            }
         }
 
         function toast(classname,msg){
