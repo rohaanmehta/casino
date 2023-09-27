@@ -29,6 +29,9 @@ if (isset($user_id) && !empty($user_id)) {
     <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Allan:wght@400;700&family=Sora:wght@200&display=swap');
 
@@ -403,6 +406,17 @@ if (isset($user_id) && !empty($user_id)) {
             border: 4px solid #254852 !important;
             color: #fff;
         }
+
+        .footer {
+            /* position: absolute; */
+            /* bottom: 0; */
+        }
+
+        @media screen and (min-width: 1440px) {
+            .body {
+                min-height: 77vh;
+            }
+        }
     </style>
 </head>
 
@@ -410,14 +424,14 @@ if (isset($user_id) && !empty($user_id)) {
     <section id='header'>
         <div class='header bg_dark'>
             <a href='<?= base_url('/') ?>'><img class='p-0 logo img-responsive' src='<?= base_url('public/images/logo.png') ?>' /></a>
-            <div class="input-group" style='width:140px'>
+            <div class="input-group my_modal" btn='wallet_btn' data-bs-toggle="modal" data-bs-target="#exampleModal" style='width:140px'>
                 <span class="mt-2 mb-2 bg-light input-group-text">
                     <!-- <i class="ms-1 fa fa-dollar" style="font-size:20px;color:#a3b0bb;"></i>  -->
                     <img src='<?= base_url('public/images/cash3.png') ?>' class='img-responsive p-0 coins' />
                 </span>
                 <input type="text" class="text-blue mt-2 mb-2 btn form-control user_coins" readonly value='<?php if (isset($coins)) {
-                                                                                                    echo $coins;
-                                                                                                } ?>'>
+                                                                                                                echo $coins;
+                                                                                                            } ?>'>
             </div>
             <div class="dropdown">
                 <a class='btn dropdown-toggle' data-bs-toggle="dropdown" style='padding-top:12px'><i style='color:#fff' data-feather="user"></i></span></a>
@@ -440,126 +454,126 @@ if (isset($user_id) && !empty($user_id)) {
         </div>
     </section>
     <section id='body'>
-        <div class='container'>
+        <div class='container body'>
             <!-- <form id='bet_form' class='p-0 col-xs-10 bg'> -->
-                <!-- //new above  -->
-                <div class='row m-3 bg col-xs-10 bg p-1 pt-3'>
-                    <div class='col-xs-12 col-md-6 col-lg-8'>
-                        <div class='panel'>
-                            <div class='next-round'>
-                                <p class='h4 text-light'> Next Round starts at <span id='timer'><?= date('H:i:s'); ?></span></p>
+            <!-- //new above  -->
+            <div class='row m-3 bg col-xs-10 bg p-1 pt-3'>
+                <div class='col-xs-12 col-md-6 col-lg-8'>
+                    <div class='panel'>
+                        <div class='next-round'>
+                            <p class='h4 text-light'> Next Round starts at <span id='timer'><?= date('H:i:s'); ?></span></p>
+                        </div>
+                        <div class='d-flex justify-content-center bg-light rounded'>
+                            <div class='w50- m-4 ms-0 me-0 btn-light' style='border-top-left-radius:10px;border-bottom-left-radius:10px;'>
+                                <img class='dice1 mt-2' src='<?= base_url('public/images/dice_2.png') ?>' />
                             </div>
-                            <div class='d-flex justify-content-center bg-light rounded'>
-                                <div class='w50- m-4 ms-0 me-0 btn-light' style='border-top-left-radius:10px;border-bottom-left-radius:10px;'>
-                                    <img class='dice1 mt-2' src='<?= base_url('public/images/dice_2.png') ?>' />
-                                </div>
-                                <div class='w50- m-4 ms-0 me-0 btn-light' style='border-top-left-radius:10px;border-bottom-left-radius:10px;'>
-                                    <img class='dice1 mt-2' src='<?= base_url('public/images/dice_3.png') ?>' />
-                                </div>
-                            </div>
-                            <label class="form-label small text-light" style='font-weight:600;color:#a3b0bb'>Bet for next round ?</label>
-                            <div class='rounded-1 p-3 mb-4' style='background:#ffffff14'>
-                                <!-- <div class='d-flex p-0 col-12'> -->
-                                <div class='row m-0'>
-                                    <div class='col-4 p-1'>
-                                        <input type='text' onkeypress="return event.charCode >= 48 && event.charCode <= 57" class='mb-1 form-control w-100 amount_btn' placeholder='AMOUNT' id='amount' />
-                                        <input type='text' readonly style='background:#10242a' id='win' placeholder='WIN' class='mb-1 form-control w-100 amount_btn' />
-                                    </div>
-
-                                    <div class='col-4 p-1'>
-                                        <button type='button' class="mb-1 even w-100 btn three">EVEN</button>
-                                        <button type='button' class="mb-1 odd w-100 btn three">ODD</button>
-                                    </div>
-
-                                    <div class='col-4 p-1'>
-                                        <button type='button' class="mb-1 h-100 w-100 btn amount_btn reset">RESET</button>
-                                    </div>
-                                </div>
-
-                                <!-- <div class='col-2 p-1'>
-                                        <input type='text' class='form-control w-100 amount_btn'/>
-                                    </div> -->
-                                <!-- <input class='btn bg_dark form-control' id='amount' style='border:none !important;color:#a3b0bb' placeholder='Amount' onkeypress="return event.charCode >= 48 && event.charCode <= 57" /> -->
-                                <!-- <button class='btn text-light w-25 bg_dark'> Even </button>
-                                    <button class='btn text-light w-25 bg_dark'> Odd </button> -->
-                                <input type='hidden' name='bet_option' id='bet-option' />
-                                <!-- </div> -->
-
-                                <!-- </div> -->
-                                <div class='row m-0 mt-1 p-1'>
-                                    <!-- <input type="range" class="form-range slider" min="2" max="12" step="1" id="customRange3"> -->
-                                    <!-- <button class='text-white btn bet_btn'>BET</button> -->
-                                    <a href="" class='butn butn__new w-100'><span>PLACE BET</span></a>
-                                    <!-- <button class='butn btn butn__new w-100'>PLACE BET</button> -->
-                                </div>
+                            <div class='w50- m-4 ms-0 me-0 btn-light' style='border-top-left-radius:10px;border-bottom-left-radius:10px;'>
+                                <img class='dice1 mt-2' src='<?= base_url('public/images/dice_3.png') ?>' />
                             </div>
                         </div>
-                    </div>
-                    <div class='col-xs-12 col-md-6 col-lg-4 scoreboard' style='height:450px;padding:0px 50px 0px 50px;'>
-                        <div class='row table-responsive' style='width:180px;height:200px;border-radius:10px;margin:auto;margin-top:150px !important; '>
-                            <table class='table table-sm text-center' style='color:#a3b0bb'>
-                                <thead>
-                                    <th>Wagered</th>
-                                    <th>Profit</th>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td class='green'>33<i class="ms-1 fa fa-dollar" style="font-size:15px;color:#a3b0bb;"></i></td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td class='green'>33<i class="ms-1 fa fa-dollar" style="font-size:15px;color:#a3b0bb;"></i></td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td class='green'>33<i class="ms-1 fa fa-dollar" style="font-size:15px;color:#a3b0bb;"></i></td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td class='green'>33<i class="ms-1 fa fa-dollar" style="font-size:15px;color:#a3b0bb;"></i></td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td class='green'>33<i class="ms-1 fa fa-dollar" style="font-size:15px;color:#a3b0bb;"></i></td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td class='green'>33<i class="ms-1 fa fa-dollar" style="font-size:15px;color:#a3b0bb;"></i></td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td class='green'>33<i class="ms-1 fa fa-dollar" style="font-size:15px;color:#a3b0bb;"></i></td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td class='green'>33<i class="ms-1 fa fa-dollar" style="font-size:15px;color:#a3b0bb;"></i></td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td class='green'>33<i class="ms-1 fa fa-dollar" style="font-size:15px;color:#a3b0bb;"></i></td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td class='green'>33<i class="ms-1 fa fa-dollar" style="font-size:15px;color:#a3b0bb;"></i></td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td class='green'>33<i class="ms-1 fa fa-dollar" style="font-size:15px;color:#a3b0bb;"></i></td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td class='green'>33<i class="ms-1 fa fa-dollar" style="font-size:15px;color:#a3b0bb;"></i></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <label class="form-label small text-light" style='font-weight:600;color:#a3b0bb'>Bet for next round ?</label>
+                        <div class='rounded-1 p-3 mb-4' style='background:#ffffff14'>
+                            <!-- <div class='d-flex p-0 col-12'> -->
+                            <div class='row m-0'>
+                                <div class='col-4 p-1'>
+                                    <input type='text' autocomplete="off" onkeypress="return event.charCode >= 48 && event.charCode <= 57" class='mb-1 form-control w-100 amount_btn' placeholder='AMOUNT' id='amount' />
+                                    <input type='text' readonly style='background:#10242a' id='win' placeholder='WIN' class='mb-1 form-control w-100 amount_btn' />
+                                </div>
+
+                                <div class='col-4 p-1'>
+                                    <button type='button' class="mb-1 even w-100 btn three">EVEN</button>
+                                    <button type='button' class="mb-1 odd w-100 btn three">ODD</button>
+                                </div>
+
+                                <div class='col-4 p-1'>
+                                    <button type='button' class="mb-1 h-100 w-100 btn amount_btn reset">RESET</button>
+                                </div>
+                            </div>
+
+                            <!-- <div class='col-2 p-1'>
+                                        <input type='text' class='form-control w-100 amount_btn'/>
+                                    </div> -->
+                            <!-- <input class='btn bg_dark form-control' id='amount' style='border:none !important;color:#a3b0bb' placeholder='Amount' onkeypress="return event.charCode >= 48 && event.charCode <= 57" /> -->
+                            <!-- <button class='btn text-light w-25 bg_dark'> Even </button>
+                                    <button class='btn text-light w-25 bg_dark'> Odd </button> -->
+                            <input type='hidden' name='bet_option' id='bet-option' />
+                            <!-- </div> -->
+
+                            <!-- </div> -->
+                            <div class='row m-0 mt-1 p-1'>
+                                <!-- <input type="range" class="form-range slider" min="2" max="12" step="1" id="customRange3"> -->
+                                <!-- <button class='text-white btn bet_btn'>BET</button> -->
+                                <a href="" class='butn butn__new w-100'><span>PLACE BET</span></a>
+                                <!-- <button class='butn btn butn__new w-100'>PLACE BET</button> -->
+                            </div>
                         </div>
                     </div>
                 </div>
+                <div class='col-xs-12 col-md-6 col-lg-4 scoreboard' style='height:450px;padding:0px 50px 0px 50px;'>
+                    <div class='row table-responsive' style='width:180px;height:200px;border-radius:10px;margin:auto;margin-top:150px !important; '>
+                        <table class='table table-sm text-center' style='color:#a3b0bb'>
+                            <thead>
+                                <th>Wagered</th>
+                                <th>Profit</th>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td class='green'>33<i class="ms-1 fa fa-dollar" style="font-size:15px;color:#a3b0bb;"></i></td>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td class='green'>33<i class="ms-1 fa fa-dollar" style="font-size:15px;color:#a3b0bb;"></i></td>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td class='green'>33<i class="ms-1 fa fa-dollar" style="font-size:15px;color:#a3b0bb;"></i></td>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td class='green'>33<i class="ms-1 fa fa-dollar" style="font-size:15px;color:#a3b0bb;"></i></td>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td class='green'>33<i class="ms-1 fa fa-dollar" style="font-size:15px;color:#a3b0bb;"></i></td>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td class='green'>33<i class="ms-1 fa fa-dollar" style="font-size:15px;color:#a3b0bb;"></i></td>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td class='green'>33<i class="ms-1 fa fa-dollar" style="font-size:15px;color:#a3b0bb;"></i></td>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td class='green'>33<i class="ms-1 fa fa-dollar" style="font-size:15px;color:#a3b0bb;"></i></td>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td class='green'>33<i class="ms-1 fa fa-dollar" style="font-size:15px;color:#a3b0bb;"></i></td>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td class='green'>33<i class="ms-1 fa fa-dollar" style="font-size:15px;color:#a3b0bb;"></i></td>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td class='green'>33<i class="ms-1 fa fa-dollar" style="font-size:15px;color:#a3b0bb;"></i></td>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td class='green'>33<i class="ms-1 fa fa-dollar" style="font-size:15px;color:#a3b0bb;"></i></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
             <!-- </form> -->
     </section>
     <section id='footer'>
-        <div class='w-100 mt-5' style='display:flex;'>
+        <div class='footer w-100 mt-5' style='display:flex;'>
             <div class='text-center p-1 w-25 my_modal' style="background-color: #111a1c;" btn='activity_btn' data-bs-toggle="modal" data-bs-target="#exampleModal">
                 <i style='color:#f2f2f2' data-feather="activity"></i><br>
                 <span class='small' style='font-size:12px;color:#a3b0bb'>Activity</span>
@@ -712,10 +726,11 @@ if (isset($user_id) && !empty($user_id)) {
             </div>
         </div>
     </section>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script>
         $(document).ready(function() {
-            setInterval(timer, 1000);
-
+            // setInterval(timer, 1000);
             $('.even').click(function() {
                 $('.even').css('border', '4px solid red');
                 $('.odd').css('border', '4px solid #254852');
@@ -727,9 +742,9 @@ if (isset($user_id) && !empty($user_id)) {
                 $('#bet-option').val('ODD');
             });
 
-            $('#bet').keyup(function() {
-                var bet = $('#bet').val() * 2;
-                if(bet == 0){
+            $('#amount').keyup(function() {
+                var bet = $('#amount').val() * 2;
+                if (bet == 0) {
                     bet = '';
                 }
                 $('#win').val(bet);
@@ -760,8 +775,8 @@ if (isset($user_id) && !empty($user_id)) {
                     // alert();
                 <?php } else { ?>
 
-                    if($('#bet-option').val() == ''){
-                        alert('value not selected');
+                    if ($('#bet-option').val() == '') {
+                        toast('info','Choose a betting option');
                         return true;
                     }
 
@@ -776,13 +791,13 @@ if (isset($user_id) && !empty($user_id)) {
                         dataType: "json",
                         success: function(data) {
                             if (data.result == 400) {
-                                alert('insufficient balance');
+                                toast('info','Insufficient balance');
                                 return true;
-                            }else if (data.result == 300) {
-                                alert('amount must be greater than 0');
+                            } else if (data.result == 300) {
+                                toast('info','Amount must be greater than 0');
                                 return true;
-                            }else if(data.result == 200){
-                                alert('bet placed succesfully');
+                            } else if (data.result == 200) {
+                                toast('info','Bet placed !');
                                 $('.user_coins').val(data.user_balance);
                                 $('.reset').trigger('click');
                             }
@@ -915,17 +930,27 @@ if (isset($user_id) && !empty($user_id)) {
             });
 
             feather.replace();
-            $('.slider').change(function() {
-                // alert($(this).val());
-                $('#total').val($(this).val());
-            });
+            // $('.slider').change(function() {
+            //     // alert($(this).val());
+            //     $('#total').val($(this).val());
+            // });
         });
-        
-        function timer(){
+
+        function timer() {
             var timer = $('#timer').html();
             timer = $('#timer').html() - 60;
             $('#timer').html(timer);
             console.log(timer);
+        }
+
+        function toast(classname,msg){
+            Toastify({
+                text: msg,
+                className: classname,
+                style: {
+                    background: "linear-gradient(90deg, #a81a1a, #870de8)",
+                }
+            }).showToast();
         }
     </script>
 </body>
