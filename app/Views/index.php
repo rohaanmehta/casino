@@ -2,7 +2,8 @@
 $session = session();
 $user_id = $session->get('user_id');
 $username = $session->get('username');
-$coins = $user_id;
+// $coins = $user_id;
+$coins = '';
 if (isset($user_id) && !empty($user_id)) {
     $db = db_connect();
     $coins = $db->table('coin')->where('user_id', $user_id)->get()->getResultArray();
@@ -656,24 +657,24 @@ if (isset($user_id) && !empty($user_id)) {
                             <form>
                                 <script src="https://checkout.razorpay.com/v1/payment-button.js" data-payment_button_id="pl_LwlcxlhCLkhkRi" async> </script>
                             </form>
-                            <span class='h6'> Deposit </span>
-                            <div class='row'>
+                            <span class='h5'> Deposit </span>
+                            <!-- <div class='row'>
                                 <label class='form-check-label mt-4 h6' style='line-height:1.5'>GET 100 % Bonus on First Deposit ! <mark>Coupon Code - NEW USER </mark></label>
                                 <div class='d-flex'>
                                     <a href='https://payments-test.cashfree.com/forms/test33'>
                                         <button class='btn w-100 bg_dark text-light'> Deposit Now</button>
                                     </a>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                         <hr class='w-100 mt-4'>
                         </hr>
                         <div class='row'>
-                            <span class='h6'> Withdrawal </span>
-                            <label class='form-check-label mt-4'>Add Amount</label>
+                            <span class='h6'> Withdraw </span>
+                            <label class='form-check-label mt-4'>Amount</label>
                             <div class='d-flex'>
-                                <input type='text' onkeypress="return event.charCode >= 48 && event.charCode <= 57 " class='form-control w-75 rounded-0 rounded-start' />
-                                <button class='btn w-25 bg_dark text-light rounded-0 rounded-end'> Request </button>
+                                <input type='text' onkeypress="return event.charCode >= 48 && event.charCode <= 57 " class='withdraw-amt form-control w-75 rounded-0 rounded-start' />
+                                <button class='btn w-25 bg_dark text-light rounded-0 rounded-end withdraw-req'> Request </button>
                             </div>
                         </div>
                     </div>
@@ -729,16 +730,45 @@ if (isset($user_id) && !empty($user_id)) {
 
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script type="text/javascript" src="<?= base_url('/assets/js/moment.js'); ?>"></script>
-    
+
     <script>
         $(document).ready(function() {
             setInterval(timer, 1000);
+
+            $('.withdraw-req').click(function() {
+                $.ajax({
+                    type: "POST",
+                    url: "<?= base_url('withdraw') ?>",
+                    data: {
+                        amount: $('.withdraw-amt').val(),
+                    },
+                    cache: false,
+                    dataType: "json",
+                    success: function(data) {
+                        if (data.result == 500) {
+                            toast('info', 'User cannot be found');
+                            return true;
+                        } else if (data.result == 400) {
+                            toast('info', 'Insufficient balance');
+                            return true;
+                        } else if (data.result == 300) {
+                            toast('info', 'Minimum withdrawal is 500');
+                            return true;
+                        } else if (data.result == 200) {
+                            toast('info', 'Withdrawal requested !');
+                            $('.btn').trigger('click');
+                            $('.user_coins').val(data.user_balance);
+                        }
+                    }
+                });
+            });
 
             $('.even').click(function() {
                 $('.even').css('border', '4px solid red');
                 $('.odd').css('border', '4px solid #254852');
                 $('#bet-option').val('EVEN');
             });
+
             $('.odd').click(function() {
                 $('.odd').css('border', '4px solid red');
                 $('.even').css('border', '4px solid #254852');
@@ -779,7 +809,7 @@ if (isset($user_id) && !empty($user_id)) {
                 <?php } else { ?>
 
                     if ($('#bet-option').val() == '') {
-                        toast('info','Choose a betting option');
+                        toast('info', 'Choose a betting option');
                         return true;
                     }
 
@@ -793,14 +823,17 @@ if (isset($user_id) && !empty($user_id)) {
                         cache: false,
                         dataType: "json",
                         success: function(data) {
-                            if (data.result == 400) {
-                                toast('info','Insufficient balance');
+                            if (data.result == 500) {
+                                toast('info', 'User cannot be found');
+                                return true;
+                            } else if (data.result == 400) {
+                                toast('info', 'Insufficient balance');
                                 return true;
                             } else if (data.result == 300) {
-                                toast('info','Amount must be greater than 0');
+                                toast('info', 'Amount must be greater than 0');
                                 return true;
                             } else if (data.result == 200) {
-                                toast('info','Bet placed !');
+                                toast('info', 'Bet placed !');
                                 $('.user_coins').val(data.user_balance);
                                 $('.reset').trigger('click');
                             }
@@ -890,16 +923,6 @@ if (isset($user_id) && !empty($user_id)) {
                     $('#login').css('display', 'none');
                     $('.modal-title').html('Fairness');
                 }
-                if ($(this).attr('btn') == 'wallet_btn') {
-                    $('#activity').css('display', 'none');
-                    $('#fairness').css('display', 'none');
-                    $('#settings').css('display', 'none');
-                    $('#wallet').css('display', 'block');
-                    $('#support').css('display', 'none');
-                    $('#register').css('display', 'none');
-                    $('#login').css('display', 'none');
-                    $('.modal-title').html('Wallet');
-                }
                 if ($(this).attr('btn') == 'support_btn') {
                     $('#activity').css('display', 'none');
                     $('#fairness').css('display', 'none');
@@ -930,6 +953,27 @@ if (isset($user_id) && !empty($user_id)) {
                     $('#support').css('display', 'none');
                     $('.modal-title').html('Login');
                 }
+                if ($(this).attr('btn') == 'wallet_btn') {
+                    <?php if (isset($user_id) && !empty($user_id)) { ?>
+                        $('#activity').css('display', 'none');
+                        $('#fairness').css('display', 'none');
+                        $('#settings').css('display', 'none');
+                        $('#wallet').css('display', 'block');
+                        $('#support').css('display', 'none');
+                        $('#register').css('display', 'none');
+                        $('#login').css('display', 'none');
+                        $('.modal-title').html('Wallet');
+                    <?php } else { ?>
+                        $('#activity').css('display', 'none');
+                        $('#fairness').css('display', 'none');
+                        $('#settings').css('display', 'none');
+                        $('#wallet').css('display', 'none');
+                        $('#register').css('display', 'none');
+                        $('#login').css('display', 'block');
+                        $('#support').css('display', 'none');
+                        $('.modal-title').html('Login');
+                    <?php } ?>
+                }
             });
 
             feather.replace();
@@ -944,7 +988,7 @@ if (isset($user_id) && !empty($user_id)) {
             var time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
 
             // console.log(dt.getHours());
-            if(dt.getHours() >= 18){
+            if (dt.getHours() >= 18) {
                 //time difference for next date
                 // var nextday = dt.getDate();
                 // var nextday =  moment().add('days', 1).format('L');
@@ -953,12 +997,12 @@ if (isset($user_id) && !empty($user_id)) {
                 var new_time = 29 - dt.getHours();
                 console.log(new_time);
 
-            }else{
+            } else {
                 console.log(time);
             }
         }
 
-        function toast(classname,msg){
+        function toast(classname, msg) {
             Toastify({
                 text: msg,
                 className: classname,

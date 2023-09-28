@@ -37,7 +37,7 @@ $routes->get('roll', 'Game::roll');
 
 //auth routes
 $routes->post('bet', 'Game::bet');
-// $routes->post('check_balance', 'Game::check_balance');
+$routes->post('withdraw', 'Game::withdraw');
 
 
 
