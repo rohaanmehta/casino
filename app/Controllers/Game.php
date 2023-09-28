@@ -73,7 +73,7 @@ class Game extends BaseController
             return $this->response->setJSON($json);
         }
 
-        if($withdraw_amt < 500){
+        if($withdraw_amt < 1000){
             $json['result'] = 300;
             return $this->response->setJSON($json);
         }

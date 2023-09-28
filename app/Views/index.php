@@ -653,11 +653,14 @@ if (isset($user_id) && !empty($user_id)) {
                         None of the user information are shared with the third party apps.
                     </div>
                     <div class="modal-body" id='wallet' style='display:none'>
-                        <div class='row'>
-                            <form>
+                        <!-- <div class='row'> -->
+                            <!-- <label class='form-check-label'>Deposit</label> -->
+                            <!-- <form id='payment-form'>
                                 <script src="https://checkout.razorpay.com/v1/payment-button.js" data-payment_button_id="pl_LwlcxlhCLkhkRi" async> </script>
-                            </form>
-                            <span class='h5'> Deposit </span>
+                            </form> -->
+
+                            <!-- <button id="rzp-button1" class="btn btn-outline-dark btn-lg"><i class="fas fa-money-bill"></i> Own Checkout</button> -->
+                            <!-- <span class='h5'> Deposit </span> -->
                             <!-- <div class='row'>
                                 <label class='form-check-label mt-4 h6' style='line-height:1.5'>GET 100 % Bonus on First Deposit ! <mark>Coupon Code - NEW USER </mark></label>
                                 <div class='d-flex'>
@@ -666,15 +669,21 @@ if (isset($user_id) && !empty($user_id)) {
                                     </a>
                                 </div>
                             </div> -->
+                        <!-- </div> -->
+                        <div class='row'>
+                            <label class='form-check-label'>Deposit</label>
+                            <div class='d-flex'>
+                                <input type='text' value='1000' placeholder='Amount' onkeypress="return event.charCode >= 48 && event.charCode <= 57 " class='deposit-amt form-control w-75 rounded-0 rounded-start' />
+                                <button id="rzp-button1" class='btn w-25 bg_dark text-light rounded-0 rounded-end deposit-req'> Deposit </button>
+                            </div>
                         </div>
                         <hr class='w-100 mt-4'>
                         </hr>
                         <div class='row'>
-                            <span class='h6'> Withdraw </span>
-                            <label class='form-check-label mt-4'>Amount</label>
+                            <label class='form-check-label'>Withdraw</label>
                             <div class='d-flex'>
-                                <input type='text' onkeypress="return event.charCode >= 48 && event.charCode <= 57 " class='withdraw-amt form-control w-75 rounded-0 rounded-start' />
-                                <button class='btn w-25 bg_dark text-light rounded-0 rounded-end withdraw-req'> Request </button>
+                                <input type='text' placeholder='Amount' onkeypress="return event.charCode >= 48 && event.charCode <= 57 " class='withdraw-amt form-control w-75 rounded-0 rounded-start' />
+                                <button class='btn w-25 bg_dark text-light rounded-0 rounded-end withdraw-req'> Withdraw </button>
                             </div>
                         </div>
                     </div>
@@ -730,10 +739,18 @@ if (isset($user_id) && !empty($user_id)) {
 
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script type="text/javascript" src="<?= base_url('/assets/js/moment.js'); ?>"></script>
-
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script type="text/javascript" src="<?= base_url('/assets/js/razorpay.js'); ?>"></script>
     <script>
         $(document).ready(function() {
-            setInterval(timer, 1000);
+            // setInterval(timer, 1000);
+            // $('.deposit-amt').keyup(function(){
+            //     if($(this).val() > 200 ){
+            //         $('.deposit-req').prop('disabled',false);
+            //     }else{
+            //         $('.deposit-req').prop('disabled',true);
+            //     }
+            // });
 
             $('.withdraw-req').click(function() {
                 $.ajax({
@@ -752,7 +769,7 @@ if (isset($user_id) && !empty($user_id)) {
                             toast('info', 'Insufficient balance');
                             return true;
                         } else if (data.result == 300) {
-                            toast('info', 'Minimum withdrawal is 500');
+                            toast('info', 'Minimum withdrawal is 1000');
                             return true;
                         } else if (data.result == 200) {
                             toast('info', 'Withdrawal requested !');
