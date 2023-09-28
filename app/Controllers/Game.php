@@ -21,11 +21,13 @@ class Game extends BaseController
         //check if amount is greater than user alance 
         $userid = $this->session->get('user_id');
 
+        //check user 
         if(!isset($userid) && empty($userid)){
             $json['result'] = 500;
             return $this->response->setJSON($json);
         }
 
+        //check balance
         $betamount = $_POST['amount'];
         $user_balance = $this->db->table('coin')->where('user_id', $userid)->get()->getResultArray();
 
@@ -36,6 +38,24 @@ class Game extends BaseController
             $json['result'] = 400;
             return $this->response->setJSON($json);
         }
+
+
+        //check if already bet for next bet
+        $hour = date('H');
+        $date = date('Y-m-d');
+        // echo $hour;
+
+        if($hour > 19){//7 pm
+            $date = date('Y-m-d', strtotime(date('Y-m-d') . ' +1 day'));
+        }
+
+        $check_bet_exist = $this->db->table('bets')->where('user_id',$userid)->where('date',$date)->get()->getResultArray();
+
+        if(isset($check_bet_exist) && !empty($check_bet_exist)){
+            $json['result'] = 100;
+            return $this->response->setJSON($json);
+        }
+
 
         //place bet
         $date = date('Y-m-d');

@@ -420,7 +420,7 @@ if (isset($user_id) && !empty($user_id)) {
         }
     </style>
 </head>
-
+<?php // print_r($last_roll);?>
 <body class=''>
     <section id='header'>
         <div class='header bg_dark'>
@@ -466,10 +466,10 @@ if (isset($user_id) && !empty($user_id)) {
                         </div>
                         <div class='d-flex justify-content-center bg-light rounded'>
                             <div class='w50- m-4 ms-0 me-0 btn-light' style='border-top-left-radius:10px;border-bottom-left-radius:10px;'>
-                                <img class='dice1 mt-2' src='<?= base_url('public/images/dice_2.png') ?>' />
+                                <img class='dice1 mt-2' src='<?= base_url('public/images/dice_'.$last_roll[0]['dice1'].'.png') ?>' />
                             </div>
                             <div class='w50- m-4 ms-0 me-0 btn-light' style='border-top-left-radius:10px;border-bottom-left-radius:10px;'>
-                                <img class='dice1 mt-2' src='<?= base_url('public/images/dice_3.png') ?>' />
+                                <img class='dice1 mt-2' src='<?= base_url('public/images/dice_'.$last_roll[0]['dice2'].'.png') ?>' />
                             </div>
                         </div>
                         <label class="form-label small text-light" style='font-weight:600;color:#a3b0bb'>Bet for next round ?</label>
@@ -793,10 +793,13 @@ if (isset($user_id) && !empty($user_id)) {
             });
 
             $('#amount').keyup(function() {
-                var bet = $('#amount').val() * 2;
+                var bet = $('#amount').val() * 90 / 100;
                 if (bet == 0) {
                     bet = '';
+                }else{
+                    bet = parseInt(bet) + parseInt($('#amount').val());
                 }
+
                 $('#win').val(bet);
             });
 
@@ -840,7 +843,10 @@ if (isset($user_id) && !empty($user_id)) {
                         cache: false,
                         dataType: "json",
                         success: function(data) {
-                            if (data.result == 500) {
+                            if (data.result == 100) {
+                                toast('info', 'You have already placed a bet for next round !');
+                                return true;
+                            } else  if (data.result == 500) {
                                 toast('info', 'User cannot be found');
                                 return true;
                             } else if (data.result == 400) {
