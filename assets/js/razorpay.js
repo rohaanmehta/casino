@@ -1,6 +1,6 @@
 $('.deposit-req').click(function() {
     if ($('.deposit-amt').val() >= 100) {
-        var amount = parseInt($('.deposit-amt').val() * 100);
+        var amount = parseInt($('.deposit-amt').val());
         var options = {
             "key": "rzp_test_aTiITp3A9BDZaR", // Enter the Key ID generated from the Dashboard
             "amount": parseInt($('.deposit-amt').val() * 100),
@@ -32,7 +32,7 @@ $('.deposit-req').click(function() {
             "handler": function(response) {
                 console.log(response.razorpay_payment_id);
                 // console.log($('.deposit-amt').val());
-                // update_balance(amount, response);
+                update_balance(amount, response.razorpay_payment_id);
                 // alert(response.razorpay_payment_id);
             },
             "modal": {

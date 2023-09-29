@@ -22,7 +22,7 @@ class Game extends BaseController
         $userid = $this->session->get('user_id');
 
         //check user 
-        if(!isset($userid) && empty($userid)){
+        if (!isset($userid) && empty($userid)) {
             $json['result'] = 500;
             return $this->response->setJSON($json);
         }
@@ -45,13 +45,13 @@ class Game extends BaseController
         $date = date('Y-m-d');
         // echo $hour;
 
-        if($hour > 19){//7 pm
+        if ($hour > 19) { //7 pm
             $date = date('Y-m-d', strtotime(date('Y-m-d') . ' +1 day'));
         }
 
-        $check_bet_exist = $this->db->table('bets')->where('user_id',$userid)->where('date',$date)->get()->getResultArray();
+        $check_bet_exist = $this->db->table('bets')->where('user_id', $userid)->where('date', $date)->get()->getResultArray();
 
-        if(isset($check_bet_exist) && !empty($check_bet_exist)){
+        if (isset($check_bet_exist) && !empty($check_bet_exist)) {
             $json['result'] = 100;
             return $this->response->setJSON($json);
         }
@@ -76,8 +76,8 @@ class Game extends BaseController
         //debit amount from user 
         $updated_user_balance = $user_balance[0]['coins'] - $betamount;
         $updated_balance['coins'] = $updated_user_balance;
-        
-        if($this->db->table('coin')->set($updated_balance)->where('user_id', $userid)->update()){
+
+        if ($this->db->table('coin')->set($updated_balance)->where('user_id', $userid)->update()) {
             $json['result'] = 200;
             $json['user_balance'] = $updated_user_balance;
         }
@@ -85,15 +85,16 @@ class Game extends BaseController
         return $this->response->setJSON($json);
     }
 
-    public function withdraw(){
+    public function withdraw()
+    {
         $withdraw_amt = $_POST['amount'];
         $userid = $this->session->get('user_id');
-        if(!isset($userid) && empty($userid)){
+        if (!isset($userid) && empty($userid)) {
             $json['result'] = 500;
             return $this->response->setJSON($json);
         }
 
-        if($withdraw_amt < 1000){
+        if ($withdraw_amt < 1000) {
             $json['result'] = 300;
             return $this->response->setJSON($json);
         }
@@ -111,11 +112,11 @@ class Game extends BaseController
 
         if ($this->db->table('withdraw')->insert($arr)) {
 
-             //debit amount from user 
+            //debit amount from user 
             $updated_user_balance = $user_balance[0]['coins'] - $withdraw_amt;
             $updated_balance['coins'] = $updated_user_balance;
-            
-            if($this->db->table('coin')->set($updated_balance)->where('user_id', $userid)->update()){
+
+            if ($this->db->table('coin')->set($updated_balance)->where('user_id', $userid)->update()) {
                 $json['result'] = 200;
                 $json['user_balance'] = $updated_user_balance;
             }
@@ -123,5 +124,36 @@ class Game extends BaseController
             $json['result'] = 200;
             return $this->response->setJSON($json);
         }
+    }
+
+    public function update_user_balance()
+    {
+        // echo'<pre>';print_r($_POST);exit;
+        $amount = $_POST['amount'];
+        $payment_id = $_POST['payment_id'];
+        $userid = $this->session->get('user_id');
+
+        $array = array(
+            'depo_user_id' => $userid ,
+            'depo_user_amount' => $amount,
+            'depo_transaction_id' => $payment_id
+        );
+
+        $this->db->table('deposit')->insert($array);
+
+        $user_balance = $this->db->table('coin')->where('user_id', $userid)->get()->getResultArray();
+        $json['result'] = 400;
+
+        if (isset($user_balance) && !empty($user_balance)) {
+            //debit amount from user 
+            $updated_user_balance = $user_balance[0]['coins'] + number_format($amount);
+            $updated_balance['coins'] = $updated_user_balance;
+
+            if ($this->db->table('coin')->set($updated_balance)->where('user_id', $userid)->update()) {
+                $json['user_balance'] = $updated_user_balance;
+                $json['result'] = 200;
+            }
+        }
+        return $this->response->setJSON($json);
     }
 }

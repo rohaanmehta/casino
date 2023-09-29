@@ -602,7 +602,7 @@ if (isset($user_id) && !empty($user_id)) {
                 <div class="modal-content">
                     <div class="modal-header btn-primary" style=' background-color:#102d52 !important'>
                         <h5 class="modal-title" id="exampleModalLabel">Previous Activity</h5>
-                        <button type="button" class="btn" data-bs-dismiss="modal" aria-label="Close">
+                        <button type="button" class="btn close-modal-btn" data-bs-dismiss="modal" aria-label="Close">
                             <i class="fa fa-close" style="font-size:30px;color:#fff;"></i><br>
                         </button>
                     </div>
@@ -745,7 +745,6 @@ if (isset($user_id) && !empty($user_id)) {
     <script type="text/javascript" src="<?= base_url('/assets/js/razorpay.js'); ?>"></script>
     <script>
         $(document).ready(function() {
-
             $('.withdraw-req').click(function() {
                 $.ajax({
                     type: "POST",
@@ -1026,6 +1025,7 @@ if (isset($user_id) && !empty($user_id)) {
         }
 
         function update_balance(amount, payment_id) {
+            // alert(amount);
             $.ajax({
                 type: "POST",
                 url: "<?= base_url('update_user_balance') ?>",
@@ -1033,17 +1033,18 @@ if (isset($user_id) && !empty($user_id)) {
                     amount:amount,
                     payment_id:payment_id
                 },
-                contentType: false,
+                // contentType: false,
                 cache: false,
-                processData: false,
+                // processData: false,
                 dataType: "json",
                 success: function(data) {
                     if (data.result == '200') {
-                        setTimeout(function() {
-                            window.location.reload();
-                        }, 1000);
-                    } else {
-                        $('.login_msg').css('display', 'block');
+                        toast('info', 'Wallet updated !');
+                        $('.user_coins').val(data.user_balance);
+                        $('.close-modal-btn').trigger('click');
+                        $('.deposit-amt').val('');
+                    }else{
+                        toast('info', 'Something went wrong !');
                     }
                 }
             });

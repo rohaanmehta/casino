@@ -38,6 +38,7 @@ $routes->get('roll', 'Game::roll');
 //auth routes
 $routes->post('bet', 'Game::bet');
 $routes->post('withdraw', 'Game::withdraw');
+$routes->post('update_user_balance', 'Game::update_user_balance');
 
 
 
