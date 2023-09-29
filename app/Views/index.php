@@ -420,12 +420,14 @@ if (isset($user_id) && !empty($user_id)) {
         }
     </style>
 </head>
-<?php // print_r($last_roll);?>
+<?php // print_r($last_roll);
+?>
+
 <body class=''>
     <section id='header'>
         <div class='header bg_dark'>
             <a href='<?= base_url('/') ?>'><img class='p-0 logo img-responsive' src='<?= base_url('public/images/logo.png') ?>' /></a>
-            <div class="input-group my_modal" btn='wallet_btn' data-bs-toggle="modal" data-bs-target="#exampleModal" style='width:140px'>
+            <div class="input-group my_modal" btn='wallet_btn' data-bs-toggle="modal" data-bs-target="#exampleModal" style='width:160px'>
                 <span class="mt-2 mb-2 bg-light input-group-text">
                     <!-- <i class="ms-1 fa fa-dollar" style="font-size:20px;color:#a3b0bb;"></i>  -->
                     <img src='<?= base_url('public/images/cash3.png') ?>' class='img-responsive p-0 coins' />
@@ -466,10 +468,10 @@ if (isset($user_id) && !empty($user_id)) {
                         </div>
                         <div class='d-flex justify-content-center bg-light rounded'>
                             <div class='w50- m-4 ms-0 me-0 btn-light' style='border-top-left-radius:10px;border-bottom-left-radius:10px;'>
-                                <img class='dice1 mt-2' src='<?= base_url('public/images/dice_'.$last_roll[0]['dice1'].'.png') ?>' />
+                                <img class='dice1 mt-2' src='<?= base_url('public/images/dice_' . $last_roll[0]['dice1'] . '.png') ?>' />
                             </div>
                             <div class='w50- m-4 ms-0 me-0 btn-light' style='border-top-left-radius:10px;border-bottom-left-radius:10px;'>
-                                <img class='dice1 mt-2' src='<?= base_url('public/images/dice_'.$last_roll[0]['dice2'].'.png') ?>' />
+                                <img class='dice1 mt-2' src='<?= base_url('public/images/dice_' . $last_roll[0]['dice2'] . '.png') ?>' />
                             </div>
                         </div>
                         <label class="form-label small text-light" style='font-weight:600;color:#a3b0bb'>Bet for next round ?</label>
@@ -654,14 +656,14 @@ if (isset($user_id) && !empty($user_id)) {
                     </div>
                     <div class="modal-body" id='wallet' style='display:none'>
                         <!-- <div class='row'> -->
-                            <!-- <label class='form-check-label'>Deposit</label> -->
-                            <!-- <form id='payment-form'>
+                        <!-- <label class='form-check-label'>Deposit</label> -->
+                        <!-- <form id='payment-form'>
                                 <script src="https://checkout.razorpay.com/v1/payment-button.js" data-payment_button_id="pl_LwlcxlhCLkhkRi" async> </script>
                             </form> -->
 
-                            <!-- <button id="rzp-button1" class="btn btn-outline-dark btn-lg"><i class="fas fa-money-bill"></i> Own Checkout</button> -->
-                            <!-- <span class='h5'> Deposit </span> -->
-                            <!-- <div class='row'>
+                        <!-- <button id="rzp-button1" class="btn btn-outline-dark btn-lg"><i class="fas fa-money-bill"></i> Own Checkout</button> -->
+                        <!-- <span class='h5'> Deposit </span> -->
+                        <!-- <div class='row'>
                                 <label class='form-check-label mt-4 h6' style='line-height:1.5'>GET 100 % Bonus on First Deposit ! <mark>Coupon Code - NEW USER </mark></label>
                                 <div class='d-flex'>
                                     <a href='https://payments-test.cashfree.com/forms/test33'>
@@ -673,7 +675,7 @@ if (isset($user_id) && !empty($user_id)) {
                         <div class='row'>
                             <label class='form-check-label'>Deposit</label>
                             <div class='d-flex'>
-                                <input type='text' value='1000' placeholder='Amount' onkeypress="return event.charCode >= 48 && event.charCode <= 57 " class='deposit-amt form-control w-75 rounded-0 rounded-start' />
+                                <input type='text' value='' placeholder='Amount' onkeypress="return event.charCode >= 48 && event.charCode <= 57" class='deposit-amt form-control w-75 rounded-0 rounded-start' />
                                 <button id="rzp-button1" class='btn w-25 bg_dark text-light rounded-0 rounded-end deposit-req'> Deposit </button>
                             </div>
                         </div>
@@ -743,14 +745,6 @@ if (isset($user_id) && !empty($user_id)) {
     <script type="text/javascript" src="<?= base_url('/assets/js/razorpay.js'); ?>"></script>
     <script>
         $(document).ready(function() {
-            // setInterval(timer, 1000);
-            // $('.deposit-amt').keyup(function(){
-            //     if($(this).val() > 200 ){
-            //         $('.deposit-req').prop('disabled',false);
-            //     }else{
-            //         $('.deposit-req').prop('disabled',true);
-            //     }
-            // });
 
             $('.withdraw-req').click(function() {
                 $.ajax({
@@ -796,7 +790,7 @@ if (isset($user_id) && !empty($user_id)) {
                 var bet = $('#amount').val() * 90 / 100;
                 if (bet == 0) {
                     bet = '';
-                }else{
+                } else {
                     bet = parseInt(bet) + parseInt($('#amount').val());
                 }
 
@@ -846,7 +840,7 @@ if (isset($user_id) && !empty($user_id)) {
                             if (data.result == 100) {
                                 toast('info', 'You have already placed a bet for next round !');
                                 return true;
-                            } else  if (data.result == 500) {
+                            } else if (data.result == 500) {
                                 toast('info', 'User cannot be found');
                                 return true;
                             } else if (data.result == 400) {
@@ -1000,10 +994,6 @@ if (isset($user_id) && !empty($user_id)) {
             });
 
             feather.replace();
-            // $('.slider').change(function() {
-            //     // alert($(this).val());
-            //     $('#total').val($(this).val());
-            // });
         });
 
         function timer() {
@@ -1033,6 +1023,30 @@ if (isset($user_id) && !empty($user_id)) {
                     background: "linear-gradient(90deg, #a81a1a, #870de8)",
                 }
             }).showToast();
+        }
+
+        function update_balance(amount, payment_id) {
+            $.ajax({
+                type: "POST",
+                url: "<?= base_url('update_user_balance') ?>",
+                data: {
+                    amount:amount,
+                    payment_id:payment_id
+                },
+                contentType: false,
+                cache: false,
+                processData: false,
+                dataType: "json",
+                success: function(data) {
+                    if (data.result == '200') {
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 1000);
+                    } else {
+                        $('.login_msg').css('display', 'block');
+                    }
+                }
+            });
         }
     </script>
 </body>
