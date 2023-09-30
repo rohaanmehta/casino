@@ -81,4 +81,36 @@ class Login extends BaseController
         // $json['result'] = '400';
         return $this->response->setJson($json);
     }
+
+    public function user_edit_form(){
+        $user_id = $this->session->get('user_id');
+        $data = array(
+            'user_name'=>$_POST['edit_user_name'],
+            // 'user_email'=>$_POST['edit_user_email'],
+            'user_phone'=>$_POST['edit_user_phone'],
+            'user_password'=>$_POST['edit_user_password'],
+            'updated_at'=> date('Y-m-d H:i:s')
+        );        
+
+        // print_r($_POST);
+        $this->validation->setRule("edit_user_name", "UserName ", "required|is_unique[user.user_name,user_id,".$user_id."]|trim");
+        // $this->validation->setRule("edit_user_email", "Email ", "required|is_unique[user.user_email,user_id,".$user_id."]|trim");
+        $this->validation->setRule("edit_user_phone", "Phone ", "required|is_unique[user.user_phone,user_id,".$user_id."]|trim");
+        $this->validation->setRule("edit_user_password", "Password ", "required");
+
+        if ($this->validation->withRequest($this->request)->run()) {
+            $this->db->table('user')->set($data)->where('user_id',$user_id)->update();
+            $json['result'] = '200';
+        } else {
+            $json = array(
+                "error" => true,
+                "edit_user_name" => $this->validation->getError("edit_user_name"),
+                // "edit_user_email" => $this->validation->getError("edit_user_email"),
+                "edit_user_phone" => $this->validation->getError("edit_user_phone"),
+                "edit_user_password" => $this->validation->getError("edit_user_password"),
+            );
+        }
+        // $json['result'] = '400';
+        return $this->response->setJson($json);
+    }
 }

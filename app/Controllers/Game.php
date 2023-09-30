@@ -132,6 +132,7 @@ class Game extends BaseController
         $amount = $_POST['amount'];
         $payment_id = $_POST['payment_id'];
         $userid = $this->session->get('user_id');
+        $first_deposit = 0;
 
         $array = array(
             'depo_user_id' => $userid ,
@@ -146,8 +147,14 @@ class Game extends BaseController
 
         if (isset($user_balance) && !empty($user_balance)) {
             //debit amount from user 
-            $updated_user_balance = $user_balance[0]['coins'] + number_format($amount);
+            if($user_balance[0]['first_deposit'] == '1'){
+                $first_deposit = 300;
+            }
+
+            $updated_user_balance = $user_balance[0]['coins'] + number_format($amount) + number_format($first_deposit);
             $updated_balance['coins'] = $updated_user_balance;
+            $updated_balance['coins'] = $updated_user_balance;
+            $updated_balance['first_deposit'] = 0;
 
             if ($this->db->table('coin')->set($updated_balance)->where('user_id', $userid)->update()) {
                 $json['user_balance'] = $updated_user_balance;
