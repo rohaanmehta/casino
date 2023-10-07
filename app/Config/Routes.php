@@ -33,7 +33,12 @@ $routes->get('/', 'Home::view');
 $routes->get('logout', 'Login::logout');
 $routes->post('Auth', 'Login::Auth');
 $routes->post('register', 'Login::register');
+$routes->post('user_edit_form', 'Login::user_edit_form');
 $routes->get('roll', 'Game::roll');
+
+//admin
+$routes->get('dashboard', 'Dashboard::view');
+
 
 //auth routes
 $routes->post('bet', 'Game::bet');

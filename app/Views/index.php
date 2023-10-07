@@ -418,6 +418,10 @@ if (isset($user_id) && !empty($user_id)) {
                 min-height: 77vh;
             }
         }
+        .error-text{
+            font-size: 13px;
+            margin-bottom: 16px;
+        }
     </style>
 </head>
 <?php // print_r($last_roll);
@@ -440,15 +444,16 @@ if (isset($user_id) && !empty($user_id)) {
                 <a class='btn dropdown-toggle' data-bs-toggle="dropdown" style='padding-top:12px'><i style='color:#fff' data-feather="user"></i></span></a>
                 <ul class="dropdown-menu" style='font-size:14px'>
                     <?php if (isset($user_id) && !empty($user_id)) { ?>
-                        <li><a class="dropdown-item"><i style='color:#102d52;' data-feather="user"></i><?= $username ?></a></li>
+                        <li><a class="dropdown-item my_modal"style='cursor:pointer' btn='user-edit' data-bs-toggle="modal" data-bs-target="#exampleModal"><i style='color:#102d52;'  data-feather="user"></i><?= $username ?></a></li>
                     <?php } else { ?>
                         <li><a class="dropdown-item my_modal" id='login_btn' data-bs-toggle="modal" data-bs-target="#exampleModal" href="#"><i style='color:#102d52;' data-feather="log-in"></i> Login</a></li>
                         <li><a class="dropdown-item my_modal" id='register_btn' data-bs-toggle="modal" data-bs-target="#exampleModal" href="#"><i style='color:#102d52;' data-feather="edit"></i> Register</a></li>
                     <?php } ?>
                     <li><a class="dropdown-item my_modal" style='cursor:pointer' btn='activity_btn' data-bs-toggle="modal" data-bs-target="#exampleModal"><i style='color:#102d52;' data-feather="activity"></i> Activity</a></li>
                     <li><a class="dropdown-item my_modal" style='cursor:pointer' btn='fairness_btn' data-bs-toggle="modal" data-bs-target="#exampleModal"><i style='color:#102d52;' data-feather="clipboard"></i> Fairness</a></li>
-                    <li><a class="dropdown-item my_modal" style='cursor:pointer' btn='wallet_btn' data-bs-toggle="modal" data-bs-target="#exampleModal"><i style='color:#102d52;' data-feather="credit-card"></i> Wallet</a></li>
+                    <li><a class="dropdown-item my_modal" style='cursor:pointer' btn='wallet_btn' data-bs-toggle="modal" data-bs-target="#exampleModal"><i style='color:#102d52;' data-feather="dollar-sign"></i> Deposit</a></li>
                     <li><a class="dropdown-item my_modal" style='cursor:pointer' btn='support_btn' data-bs-toggle="modal" data-bs-target="#exampleModal"><i style='color:#102d52;' data-feather="headphones"></i> Support</a></li>
+                    <li><a class="dropdown-item my_modal" style='cursor:pointer' btn='withdraw_btn' data-bs-toggle="modal" data-bs-target="#exampleModal"><i style='color:#102d52;' data-feather="credit-card"></i> Withdraw</a></li>
                     <?php if (isset($user_id) && !empty($user_id)) { ?>
                         <li><a class="dropdown-item" href="<?= base_url('logout') ?>"><i style='color:#102d52;' data-feather="log-out"></i> Logout</a></li>
                     <?php } ?>
@@ -586,8 +591,8 @@ if (isset($user_id) && !empty($user_id)) {
                 <span class='small' style='font-size:12px;color:#a3b0bb'>Fairness</span>
             </div>
             <div class='text-center p-1 w-25 my_modal' style="background-color: #111a1c;" btn='wallet_btn' data-bs-toggle="modal" data-bs-target="#exampleModal">
-                <i style='color:#f2f2f2' data-feather="credit-card"></i><br>
-                <span class='small' style='font-size:12px;color:#a3b0bb'>Wallet</span>
+                <i style='color:#f2f2f2' data-feather="dollar-sign"></i><br>
+                <span class='small' style='font-size:12px;color:#a3b0bb'>Deposit</span>
             </div>
             <div class='text-center p-1 w-25 my_modal' style="background-color: #111a1c;" btn='support_btn' data-bs-toggle="modal" data-bs-target="#exampleModal">
                 <i style='color:#f2f2f2' data-feather="headphones"></i><br>
@@ -655,37 +660,24 @@ if (isset($user_id) && !empty($user_id)) {
                         None of the user information are shared with the third party apps.
                     </div>
                     <div class="modal-body" id='wallet' style='display:none'>
-                        <!-- <div class='row'> -->
-                        <!-- <label class='form-check-label'>Deposit</label> -->
-                        <!-- <form id='payment-form'>
-                                <script src="https://checkout.razorpay.com/v1/payment-button.js" data-payment_button_id="pl_LwlcxlhCLkhkRi" async> </script>
-                            </form> -->
-
-                        <!-- <button id="rzp-button1" class="btn btn-outline-dark btn-lg"><i class="fas fa-money-bill"></i> Own Checkout</button> -->
-                        <!-- <span class='h5'> Deposit </span> -->
-                        <!-- <div class='row'>
-                                <label class='form-check-label mt-4 h6' style='line-height:1.5'>GET 100 % Bonus on First Deposit ! <mark>Coupon Code - NEW USER </mark></label>
-                                <div class='d-flex'>
-                                    <a href='https://payments-test.cashfree.com/forms/test33'>
-                                        <button class='btn w-100 bg_dark text-light'> Deposit Now</button>
-                                    </a>
-                                </div>
-                            </div> -->
-                        <!-- </div> -->
                         <div class='row'>
+                            <!-- <img src='<?= base_url('public/images/coupon.png');?>'/> -->
+                            <?php if($first_deposit == 1){?>
+                                <p class="bg-danger text-light w-auto m-auto mb-3">Get free 300$ on your First Deposit</p>
+                            <?php } ?>
                             <label class='form-check-label'>Deposit</label>
-                            <div class='d-flex'>
-                                <input type='text' value='' placeholder='Amount' onkeypress="return event.charCode >= 48 && event.charCode <= 57" class='deposit-amt form-control w-75 rounded-0 rounded-start' />
-                                <button id="rzp-button1" class='btn w-25 bg_dark text-light rounded-0 rounded-end deposit-req'> Deposit </button>
+                            <div class='p-3 pt-2'>
+                                <input type='text' value='' placeholder='Amount' onkeypress="return event.charCode >= 48 && event.charCode <= 57" class='mb-2 deposit-amt form-control rounded'/>
+                                <button id="rzp-button1" class='btn form-control bg_dark text-light rounded deposit-req'> Deposit </button>
                             </div>
                         </div>
-                        <hr class='w-100 mt-4'>
-                        </hr>
+                    </div>
+                    <div class="modal-body" id='withdraw' style='display:none'>
                         <div class='row'>
                             <label class='form-check-label'>Withdraw</label>
-                            <div class='d-flex'>
-                                <input type='text' placeholder='Amount' onkeypress="return event.charCode >= 48 && event.charCode <= 57 " class='withdraw-amt form-control w-75 rounded-0 rounded-start' />
-                                <button class='btn w-25 bg_dark text-light rounded-0 rounded-end withdraw-req'> Withdraw </button>
+                            <div class='p-3 pt-2'>
+                                <input type='text' placeholder='Amount' onkeypress="return event.charCode >= 48 && event.charCode <= 57 " class='mb-2 withdraw-amt form-control rounded' />
+                                <button class='btn form-control bg_dark text-light rounded withdraw-req'> Withdraw </button>
                             </div>
                         </div>
                     </div>
@@ -701,35 +693,50 @@ if (isset($user_id) && !empty($user_id)) {
                     </div>
                     <div class="modal-body" id='register' style='display:none'>
                         <form id='register_form'>
-                            <input type="text" class='form-control mb-2' name='user_name' placeholder='Username' />
-                            <div class="text-danger" id="error-user_name"></div>
-                            <input type="text" class='form-control mb-2' name='user_email' placeholder='Email' />
-                            <div class="text-danger" id="error-user_email"></div>
-                            <input type="text" class='form-control mb-2' name='user_phone' onkeypress="return event.charCode >= 48 && event.charCode <= 57 " placeholder='Number' />
-                            <div class="text-danger" id="error-user_phone"></div>
+                            <input type="text" class='form-control mb-1' name='user_name' placeholder='Username' />
+                            <div class="text-danger error-text" id="error-user_name"></div>
+                            <input type="text" class='form-control mb-1' name='user_email' placeholder='Email' />
+                            <div class="text-danger error-text" id="error-user_email"></div>
+                            <input type="text" class='form-control mb-1' name='user_phone' onkeypress="return event.charCode >= 48 && event.charCode <= 57 " placeholder='Number' />
+                            <div class="text-danger error-text" id="error-user_phone"></div>
                             <input type="text" class='form-control mb-1' name='user_password' placeholder='Password' />
-                            <div class="text-danger" id="error-user_password"></div>
+                            <div class="text-danger error-text" id="error-user_password"></div>
 
                             <div class="form-check mb-4">
                                 <input class="form-check-input" type="checkbox" value="0" name='age_confirmation' id="age_confirmation">
                                 <label class="form-check-label small">
                                     I am at least 18 years of age , and accept the Terms & Conditions.
                                 </label>
-                                <div class="text-danger" id="error-age_confirmation"></div>
+                                <div class="text-danger error-text" id="error-age_confirmation"></div>
                             </div>
                             <div class='d-flex justify-content-center'>
                                 <button class='w-50 btn' style='background:#102d52;color:#fff'>Register</button>
                             </div>
                         </form>
                     </div>
+                    <div class="modal-body" id='user-edit' style='display:none'>
+                        <form id='user_edit_form'>
+                            <input type="text" class='form-control mb-1' name='edit_user_name' value='<?php if(isset($user_info) && !empty($user_info)){ echo $user_info[0]['user_name']; }?>' placeholder='Username' />
+                            <div class="text-danger error-text" id="error-edit_user_name"></div>
+                            <input type="text" class='form-control mb-1' disabled name='edit_user_email' value='<?php if(isset($user_info) && !empty($user_info)){ echo $user_info[0]['user_email']; }?>' placeholder='Email' />
+                            <div class="text-danger error-text" id="error-edit_user_email"></div>
+                            <input type="text" class='form-control mb-1' name='edit_user_phone' value='<?php if(isset($user_info) && !empty($user_info)){ echo $user_info[0]['user_phone']; }?>'  onkeypress="return event.charCode >= 48 && event.charCode <= 57 " placeholder='Number' />
+                            <div class="text-danger error-text" id="error-edit_user_phone"></div>
+                            <input type="text" class='form-control mb-1' name='edit_user_password' value='<?php if(isset($user_info) && !empty($user_info)){ echo $user_info[0]['user_password']; }?>'  placeholder='Password' />
+                            <div class="text-danger error-text" id="error-edit_user_password"></div>
+                            <div class='d-flex justify-content-center'>
+                                <button class='w-50 btn' style='background:#102d52;color:#fff'>Update</button>
+                            </div>
+                        </form>
+                    </div>
                     <div class="modal-body" id='login' style='display:none'>
                         <form id='login_form'>
                             <input type="text" class='form-control mb-2' name='email' placeholder='Email' />
-                            <input type="text" class='form-control mb-1' name='password' placeholder='Password' />
-                            <div class='row text-center mb-2 login_msg' style='display:none'>
-                                <span class='text-danger'> Email or Password is Invalid </span>
+                            <input type="text" class='form-control' name='password' placeholder='Password' />
+                            <div class='row text-right mb-2 login_msg' style='display:none'>
+                                <span class='text-danger error-text'> Email or Password is Invalid </span>
                             </div>
-                            <div class='d-flex justify-content-center'>
+                            <div class='mt-2 d-flex justify-content-center'>
                                 <button class='w-50 btn' style='background:#102d52;color:#fff'>Login</button>
                             </div>
                         </form>
@@ -766,7 +773,7 @@ if (isset($user_id) && !empty($user_id)) {
                             return true;
                         } else if (data.result == 200) {
                             toast('info', 'Withdrawal requested !');
-                            $('.btn').trigger('click');
+                            $('.close-modal-btn').trigger('click');
                             $('.user_coins').val(data.user_balance);
                         }
                     }
@@ -817,6 +824,8 @@ if (isset($user_id) && !empty($user_id)) {
                     $('#register').css('display', 'none');
                     $('#login').css('display', 'block');
                     $('#support').css('display', 'none');
+                    $('#user-edit').css('display', 'none');
+                    $('#withdraw').css('display', 'none');
                     $('.modal-title').html('Login');
                     // alert();
                 <?php } else { ?>
@@ -872,6 +881,7 @@ if (isset($user_id) && !empty($user_id)) {
                     success: function(data) {
                         // console.log(data.success);
                         if (data.result == '200') {
+                            toast('info', 'Logged in');
                             setTimeout(function() {
                                 window.location.reload();
                             }, 1000);
@@ -909,9 +919,45 @@ if (isset($user_id) && !empty($user_id)) {
                                 }
                             });
                         } else {
+                            toast('info', 'Registered Successfully');
                             setTimeout(function() {
                                 window.location.reload();
-                            }, 1000);
+                            }, 2000);
+                        }
+                    }
+                });
+            });
+
+            
+            $('#user_edit_form').submit(function(e) {
+                e.preventDefault();
+                $.ajax({
+                    type: "POST",
+                    url: "<?= base_url('user_edit_form') ?>",
+                    data: new FormData(this),
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    dataType: "json",
+                    success: function(data) {
+                        if (data.error) {
+                            var i = 0;
+                            $.each(data, function(key, value) {
+                                if (value != '') {
+                                    $("#error-" + key).html(value);
+                                    $("#" + key).addClass("border-danger");
+                                    if (i == 1) {
+                                        $('#' + key).focus();
+                                    }
+                                    i++;
+                                } else {
+                                    $("#error-" + key).html(" ");
+                                    $("#" + key).removeClass("border-danger");
+                                }
+                            });
+                        } else {
+                            $('.close-modal-btn').trigger('click');
+                            toast('info', 'User Details Updated !');
                         }
                     }
                 });
@@ -928,6 +974,8 @@ if (isset($user_id) && !empty($user_id)) {
                     $('#register').css('display', 'none');
                     $('#login').css('display', 'none');
                     $('.modal-title').html('Previous Activity');
+                    $('#withdraw').css('display', 'none');
+                    $('#user-edit').css('display', 'none');
                 }
                 if ($(this).attr('btn') == 'fairness_btn') {
                     $('#activity').css('display', 'none');
@@ -938,6 +986,8 @@ if (isset($user_id) && !empty($user_id)) {
                     $('#register').css('display', 'none');
                     $('#login').css('display', 'none');
                     $('.modal-title').html('Fairness');
+                    $('#withdraw').css('display', 'none');
+                    $('#user-edit').css('display', 'none');
                 }
                 if ($(this).attr('btn') == 'support_btn') {
                     $('#activity').css('display', 'none');
@@ -948,6 +998,8 @@ if (isset($user_id) && !empty($user_id)) {
                     $('#register').css('display', 'none');
                     $('#login').css('display', 'none');
                     $('.modal-title').html('Support');
+                    $('#withdraw').css('display', 'none');
+                    $('#user-edit').css('display', 'none');
                 }
                 if ($(this).attr('id') == 'register_btn') {
                     $('#activity').css('display', 'none');
@@ -958,6 +1010,8 @@ if (isset($user_id) && !empty($user_id)) {
                     $('#login').css('display', 'none');
                     $('#support').css('display', 'none');
                     $('.modal-title').html('Register');
+                    $('#withdraw').css('display', 'none');
+                    $('#user-edit').css('display', 'none');
                 }
                 if ($(this).attr('id') == 'login_btn') {
                     $('#activity').css('display', 'none');
@@ -965,9 +1019,36 @@ if (isset($user_id) && !empty($user_id)) {
                     $('#settings').css('display', 'none');
                     $('#wallet').css('display', 'none');
                     $('#register').css('display', 'none');
+                    $('#user-edit').css('display', 'none');
                     $('#login').css('display', 'block');
                     $('#support').css('display', 'none');
                     $('.modal-title').html('Login');
+                    $('#withdraw').css('display', 'none');
+                }
+                if ($(this).attr('btn') == 'withdraw_btn') {
+                    <?php if (isset($user_id) && !empty($user_id)) { ?>
+                        $('#activity').css('display', 'none');
+                        $('#fairness').css('display', 'none');
+                        $('#settings').css('display', 'none');
+                        $('#wallet').css('display', 'none');
+                        $('#withdraw').css('display', 'block');
+                        $('#support').css('display', 'none');
+                        $('#register').css('display', 'none');
+                        $('#login').css('display', 'none');
+                        $('#user-edit').css('display', 'none');
+                        $('.modal-title').html('Withdraw');
+                    <?php } else { ?>
+                        $('#activity').css('display', 'none');
+                        $('#fairness').css('display', 'none');
+                        $('#settings').css('display', 'none');
+                        $('#user-edit').css('display', 'none');
+                        $('#wallet').css('display', 'none');
+                        $('#register').css('display', 'none');
+                        $('#login').css('display', 'block');
+                        $('#support').css('display', 'none');
+                        $('#withdraw').css('display', 'none');
+                        $('.modal-title').html('Login');
+                    <?php } ?>
                 }
                 if ($(this).attr('btn') == 'wallet_btn') {
                     <?php if (isset($user_id) && !empty($user_id)) { ?>
@@ -975,18 +1056,48 @@ if (isset($user_id) && !empty($user_id)) {
                         $('#fairness').css('display', 'none');
                         $('#settings').css('display', 'none');
                         $('#wallet').css('display', 'block');
+                        $('#withdraw').css('display', 'none');
                         $('#support').css('display', 'none');
+                        $('#user-edit').css('display', 'none');
                         $('#register').css('display', 'none');
                         $('#login').css('display', 'none');
-                        $('.modal-title').html('Wallet');
+                        $('.modal-title').html('Deposit');
                     <?php } else { ?>
                         $('#activity').css('display', 'none');
                         $('#fairness').css('display', 'none');
+                        $('#user-edit').css('display', 'none');
                         $('#settings').css('display', 'none');
                         $('#wallet').css('display', 'none');
                         $('#register').css('display', 'none');
                         $('#login').css('display', 'block');
                         $('#support').css('display', 'none');
+                        $('#withdraw').css('display', 'none');
+                        $('.modal-title').html('Login');
+                    <?php } ?>
+                }
+                
+                if ($(this).attr('btn') == 'user-edit') {
+                    <?php if (isset($user_id) && !empty($user_id)) { ?>
+                        $('#activity').css('display', 'none');
+                        $('#fairness').css('display', 'none');
+                        $('#settings').css('display', 'none');
+                        $('#wallet').css('display', 'none');
+                        $('#user-edit').css('display', 'block');
+                        $('#withdraw').css('display', 'none');
+                        $('#support').css('display', 'none');
+                        $('#register').css('display', 'none');
+                        $('#login').css('display', 'none');
+                        $('.modal-title').html('User Details');
+                    <?php } else { ?>
+                        $('#activity').css('display', 'none');
+                        $('#fairness').css('display', 'none');
+                        $('#settings').css('display', 'none');
+                        $('#user-edit').css('display', 'none');
+                        $('#wallet').css('display', 'none');
+                        $('#register').css('display', 'none');
+                        $('#login').css('display', 'block');
+                        $('#support').css('display', 'none');
+                        $('#withdraw').css('display', 'none');
                         $('.modal-title').html('Login');
                     <?php } ?>
                 }
