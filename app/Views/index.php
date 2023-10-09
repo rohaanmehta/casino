@@ -54,7 +54,6 @@ if($last_roll[0]['total']%2 == 0){
             /* background-color: #102d52 !important; */
             background: linear-gradient(180deg, rgba(2, 0, 36, 1) 0%, rgb(46 61 68) 66%, rgb(46 79 88) 95%)
         }
-
         /* bootstrap csss   */
         button,
         textarea:focus {
@@ -692,7 +691,7 @@ if($last_roll[0]['total']%2 == 0){
                     </div>
                     <div class="modal-body" id='activity' style='display:none'>
                         <div class='row p-4 table-responsive' style='max-height:300px;border-radius:10px;'>
-                            <table class='bg_dark table table-bordered table-striped table-sm text-center' style='color:#a3b0bb'>
+                            <table class='table table-bordered table-striped table-sm text-center' style='background:#10242a;color:#a3b0bb'>
                                 <thead>
                                     <th class='mobile-font'>Total</th>
                                     <th class='mobile-font'>Bet option</th>
@@ -710,18 +709,26 @@ if($last_roll[0]['total']%2 == 0){
                         </div>
                     </div>
                     <div class="modal-body" id='transaction' style='display:none'>
-                        <div class='row p-4 table-responsive' style='max-height:300px;border-radius:10px;'>
-                            <table class='bg_dark table table-bordered table-striped table-sm text-center' style='color:#a3b0bb'>
+                        <div class='row p-4 pt-2 pb-1 table-responsive' style='max-height:300px;border-radius:10px;'>
+                            <table class='table table-bordered table-striped table-sm text-center' style='background:#10242a;color:#a3b0bb'>
                                 <thead>
-                                    <th class='mobile-font'>Total</th>
-                                    <th class='mobile-font'>Bet option</th>
+                                    <th class='mobile-font'>Type</th>
+                                    <th class='mobile-font'>Amount</th>
+                                    <th class='mobile-font'>Status</th>
                                 </thead>
                                 <tbody>
-                                    <?php if(isset($previous_activity) && !empty($previous_activity)){
-                                        foreach($previous_activity as $single){?>
+                                    <?php if(isset($transactions) && !empty($transactions)){
+                                        foreach($transactions as $single2){?>
                                         <tr>
-                                            <td class='mobile-font' style='color:#a3b0bb'><?= $single['total'];?></td>
-                                            <td class='mobile-font' style='color:#a3b0bb'><?php if($single['total'] % 2 == 0){ echo 'EVEN'; }else{ echo 'ODD';}?></td>
+                                            <?php if(isset($single2['with_user_amount'])) { ?>
+                                                <td class='mobile-font' style='color:#a3b0bb'> Withdraw</td>
+                                                <td class='mobile-font' style='color:#a3b0bb'><?= $single2['with_user_amount'];?></td>
+                                                <td class='mobile-font' <?php if($single2['with_status'] == 'PENDING'){?>  style="color:#ff4b4b" <?php } else { ?> style="color:#4bffac" <?php }  ?>'> <?= $single2['with_status'];?></td>
+                                            <?php } else { ?>
+                                                <td class='mobile-font' style='color:#a3b0bb'> Deposit</td>
+                                                <td class='mobile-font' style='color:#a3b0bb'><?= $single2['depo_user_amount'];?></td>
+                                                <td class='mobile-font' style='color:#4bffac'>COMPLETED</td>
+                                            <?php } ?>
                                         </tr>
                                     <?php } } ?>
                                 </tbody>
@@ -771,7 +778,7 @@ if($last_roll[0]['total']%2 == 0){
                             <div class="text-danger error-text" id="error-user_email"></div>
                             <input type="text" autocomplete="off" class='form-control mb-1' name='user_phone' onkeypress="return event.charCode >= 48 && event.charCode <= 57 " placeholder='Number' />
                             <div class="text-danger error-text" id="error-user_phone"></div>
-                            <input type="text" autocomplete="off" class='form-control mb-1' name='user_password' placeholder='Password' />
+                            <input type="password" autocomplete="off" class='form-control mb-1' name='user_password' placeholder='Password' />
                             <div class="text-danger error-text" id="error-user_password"></div>
 
                             <div class="form-check mb-4">
@@ -838,7 +845,7 @@ if($last_roll[0]['total']%2 == 0){
                     <div class="modal-body" id='login' style='display:none'>
                         <form id='login_form'>
                             <input type="text" autocomplete="off" class='form-control mb-2' name='email' placeholder='Email' />
-                            <input type="text" autocomplete="off" class='form-control' name='password' placeholder='Password' />
+                            <input type="password" autocomplete="off" class='form-control' name='password' placeholder='Password' />
                             <div class='row text-right mb-2 login_msg' style='display:none'>
                                 <span class='text-danger error-text'> Email or Password is Invalid </span>
                             </div>
@@ -910,8 +917,11 @@ if($last_roll[0]['total']%2 == 0){
                             return true;
                         } else if (data.result == 200) {
                             toast('info', 'Withdrawal requested !');
-                            $('.close-modal-btn').trigger('click');
-                            $('.user_coins').val(data.user_balance);
+                            // $('.close-modal-btn').trigger('click');
+                            // $('.user_coins').val(data.user_balance);
+                            setTimeout(function () {
+                                window.location.reload();
+                            },2000);
                         }
                     }
                 });
@@ -1331,9 +1341,12 @@ if($last_roll[0]['total']%2 == 0){
                 success: function(data) {
                     if (data.result == '200') {
                         toast('info', 'Wallet updated !');
-                        $('.user_coins').val(data.user_balance);
-                        $('.close-modal-btn').trigger('click');
-                        $('.deposit-amt').val('');
+                        // $('.user_coins').val(data.user_balance);
+                        // $('.close-modal-btn').trigger('click');
+                        // $('.deposit-amt').val('');
+                        setTimeout(function () {
+                            window.location.reload();
+                        },2000);
                     } else {
                         toast('info', 'Something went wrong !');
                     }

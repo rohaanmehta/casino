@@ -14,11 +14,16 @@ class Home extends BaseController
         $data['previous_activity'] = $this->db->table('rolls')->select('*')->orderBy('id','desc')->limit(100)->get()->getResultArray();
         $data['transactions_deposit'] = $this->db->table('deposit')->select('*')->where('depo_user_id',$userid)->orderBy('created_at','desc')->limit(100)->get()->getResultArray();
         $data['transactions_withdraw'] = $this->db->table('withdraw')->select('*')->where('with_user_id',$userid)->orderBy('created_at','desc')->limit(100)->get()->getResultArray();
-        
+        $transactions = array();
         $transactions = array_merge($data['transactions_deposit'],$data['transactions_withdraw']);
-        krsort($transactions,$created_at);
-        echo'<pre>';print_r($transactions);exit;
-
+        // arsort($transactions);
+        
+        usort($transactions, function($a, $b) {
+            return $b['created_at'] <=> $a['created_at'];
+        });
+        // arsort($transactions);
+        // echo'<pre>';print_r($transactions);exit;
+        $data['transactions'] = $transactions;
         if(empty($data['first_deposit'])){
             $data['first_deposit'] = 1;
         }else{

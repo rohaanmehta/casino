@@ -135,7 +135,6 @@ class Game extends BaseController
 
     public function update_user_balance()
     {
-        // echo'<pre>';print_r($_POST);exit;
         $amount = $_POST['amount'];
         $payment_id = $_POST['payment_id'];
         $userid = $this->session->get('user_id');
@@ -157,8 +156,9 @@ class Game extends BaseController
             if($user_balance[0]['first_deposit'] == '1'){
                 $first_deposit = 300;
             }
+        // echo'<pre>';print_r($amount);exit;
 
-            $updated_user_balance = $user_balance[0]['coins'] + number_format($amount) + number_format($first_deposit);
+            $updated_user_balance = $user_balance[0]['coins'] + $amount + $first_deposit;
             $updated_balance['coins'] = $updated_user_balance;
             $updated_balance['coins'] = $updated_user_balance;
             $updated_balance['first_deposit'] = 0;
