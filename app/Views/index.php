@@ -11,6 +11,10 @@ if (isset($user_id) && !empty($user_id)) {
     // print_r($coins);
     // $coins= '0';
 }
+$total_option = 'ODD';
+if($last_roll[0]['total']%2 == 0){
+    $total_option = 'EVEN';
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,24 +24,16 @@ if (isset($user_id) && !empty($user_id)) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Casino </title>
-    <link rel="icon" type="image/x-icon" href="<?= base_url('public/images/logo.png') ?>">
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-
-    <script src="https://unpkg.com/feather-icons"></script>
-    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
-
+    <link rel="icon" type="image/x-icon" href="<?= base_url('public/images/logo.webp') ?>">
+    <link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/bootstrap.css'); ?>">
+    <link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/toastify.css'); ?>">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
-
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Allan:wght@400;700&family=Sora:wght@200&display=swap');
 
         body {
-            background-image: url('public/images/background.jpg');
+            background-color: #000;
+            background-image: url('public/images/background.webp');
             background-repeat: no-repeat;
             background-position: center;
             background-size: cover;
@@ -48,7 +44,7 @@ if (isset($user_id) && !empty($user_id)) {
             /* background-color: #4B5893 !important; */
             background: linear-gradient(98.3deg, rgb(0, 0, 0) 10.6%, rgb(221 23 23) 97.7%);
             border-radius: 8px;
-            /* background-image: url('public/images/casinoboard.png');
+            /* background-image: url('public/images/casinoboard.webp');
             background-repeat: no-repeat;
             background-position: center;
             background-size: contain;         */
@@ -222,7 +218,7 @@ if (isset($user_id) && !empty($user_id)) {
         }
 
         tr {
-            border-color: #a3b0bb;
+            border-color: #858585;
         }
 
         .btn::placeholder {
@@ -266,11 +262,20 @@ if (isset($user_id) && !empty($user_id)) {
         }
 
         .scoreboard {
-            background-image: url('public/images/scoreboard.png');
+            /* background-image: url('public/images/scoreboard.webp');
             background-repeat: no-repeat;
             background-position: center;
-            background-size: contain;
+            background-size: contain; */
+            height: 100%;
+            max-height: 434px;
+            /* height: 340px; */
             /* margin-left: 20px; */
+            /* background-image: linear-gradient(90deg, #a81a1a, #870de8); */
+            background-color: #10242a;
+            border: 4px solid #254852 !important;
+            /* max-width: 300px; */
+            width: 100%;
+            overflow-y: scroll;
         }
 
         @media screen and (max-width: 350px) {
@@ -418,44 +423,149 @@ if (isset($user_id) && !empty($user_id)) {
                 min-height: 77vh;
             }
         }
-        .error-text{
+
+        .error-text {
             font-size: 13px;
             margin-bottom: 16px;
         }
+
+        .dice-margin {
+            margin-top: 25px;
+            margin-bottom: 25px;
+        }
+
+        .scoreboard-box {
+            margin-top: 20px;
+        }
+
+        @media screen and (max-width: 767px) {
+            .scoreboard-box {
+                margin-top: 0px;
+            }
+        }
+
+        .coin-show {
+            width: 160px;
+        }
+
+        @media screen and (max-width: 400px) {
+            .mobile-font {
+                font-size: 12px !important;
+            }
+
+            .dice-margin {
+                margin-top: 0px;
+                margin-bottom: 0px;
+            }
+
+            .scoreboard {
+                height: 300px;
+            }
+
+            .coin-show {
+                width: 120px;
+            }
+
+            .coins {
+                width: 25px;
+            }
+
+            .logo {
+                width: 50px;
+                margin-top: 4px;
+            }
+
+            .mobile-font-heading {
+                font-size: 12px !important;
+                margin-bottom: 4px;
+                margin-top: 6px;
+            }
+
+            .dropdown-item {
+                font-size: 13px;
+            }
+
+            .mobile-feather-icon {
+                width: 20px;
+                margin-left: 0px;
+                margin-right: 3px;
+            }
+
+            .mobile-font-heading-2 {
+                font-size: 15px;
+            }
+
+            .toastify {
+                font-size: 11px !important;
+            }
+
+            input[type='radio']:checked:after {
+                width: 20px;
+                height: 20px;
+                border-radius: 15px;
+                top: -2px;
+                left: -3px;
+                position: relative;
+                background-color: #000;
+                content: '';
+                display: inline-block;
+                visibility: visible;
+                border: 2px solid white;
+            }
+        }
+
+        /* width */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        /* Track */
+        ::-webkit-scrollbar-track {
+            /* background: #cbcbcb; */
+            background: #101e22;
+        }
+
+        /* Handle */
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+        }
+
+        /* Handle on hover */
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
     </style>
 </head>
-<?php // print_r($last_roll);
-?>
 
-<body class=''>
+<body class='' style='padding:0px !important'>
     <section id='header'>
         <div class='header bg_dark'>
-            <a href='<?= base_url('/') ?>'><img class='p-0 logo img-responsive' src='<?= base_url('public/images/logo.png') ?>' /></a>
-            <div class="input-group my_modal" btn='wallet_btn' data-bs-toggle="modal" data-bs-target="#exampleModal" style='width:160px'>
+            <a href='<?= base_url('/') ?>'><img class='p-0 logo img-responsive' src='<?= base_url('public/images/logo.webp') ?>' /></a>
+            <div class="input-group my_modal coin-show" btn='wallet_btn' data-bs-toggle="modal" data-bs-target="#exampleModal">
                 <span class="mt-2 mb-2 bg-light input-group-text">
-                    <!-- <i class="ms-1 fa fa-dollar" style="font-size:20px;color:#a3b0bb;"></i>  -->
-                    <img src='<?= base_url('public/images/cash3.png') ?>' class='img-responsive p-0 coins' />
+                    <img src='<?= base_url('public/images/cash3.webp') ?>' class='img-responsive p-0 coins' />
                 </span>
-                <input type="text" class="text-blue mt-2 mb-2 btn form-control user_coins" readonly value='<?php if (isset($coins)) {
-                                                                                                                echo $coins;
-                                                                                                            } ?>'>
+                <input type="text" autocomplete="off" class="p-0 mobile-font text-blue mt-2 mb-2 btn form-control user_coins" readonly value='<?php if (isset($coins)) {
+                                                                                                                                                    echo $coins;
+                                                                                                                                                } ?>'>
             </div>
             <div class="dropdown">
-                <a class='btn dropdown-toggle' data-bs-toggle="dropdown" style='padding-top:12px'><i style='color:#fff' data-feather="user"></i></span></a>
+                <a class='btn dropdown-toggle' data-bs-toggle="dropdown" style='padding-top:12px'><i class='mobile-feather-icon' style='color:#fff;' data-feather="user"></i></span></a>
                 <ul class="dropdown-menu" style='font-size:14px'>
                     <?php if (isset($user_id) && !empty($user_id)) { ?>
-                        <li><a class="dropdown-item my_modal"style='cursor:pointer' btn='user-edit' data-bs-toggle="modal" data-bs-target="#exampleModal"><i style='color:#102d52;'  data-feather="user"></i><?= $username ?></a></li>
+                        <li><a class="dropdown-item my_modal" style='cursor:pointer' btn='user-edit' data-bs-toggle="modal" data-bs-target="#exampleModal"><i class='mobile-feather-icon' style='color:#102d52;' data-feather="user"></i><?= $username ?></a></li>
                     <?php } else { ?>
-                        <li><a class="dropdown-item my_modal" id='login_btn' data-bs-toggle="modal" data-bs-target="#exampleModal" href="#"><i style='color:#102d52;' data-feather="log-in"></i> Login</a></li>
-                        <li><a class="dropdown-item my_modal" id='register_btn' data-bs-toggle="modal" data-bs-target="#exampleModal" href="#"><i style='color:#102d52;' data-feather="edit"></i> Register</a></li>
+                        <li><a class="dropdown-item my_modal" id='login_btn' data-bs-toggle="modal" data-bs-target="#exampleModal" href="#"><i class='mobile-feather-icon' style='color:#102d52;' data-feather="log-in"></i> Login</a></li>
+                        <li><a class="dropdown-item my_modal" id='register_btn' data-bs-toggle="modal" data-bs-target="#exampleModal" href="#"><i class='mobile-feather-icon' style='color:#102d52;' data-feather="edit"></i> Register</a></li>
                     <?php } ?>
-                    <li><a class="dropdown-item my_modal" style='cursor:pointer' btn='activity_btn' data-bs-toggle="modal" data-bs-target="#exampleModal"><i style='color:#102d52;' data-feather="activity"></i> Activity</a></li>
-                    <li><a class="dropdown-item my_modal" style='cursor:pointer' btn='fairness_btn' data-bs-toggle="modal" data-bs-target="#exampleModal"><i style='color:#102d52;' data-feather="clipboard"></i> Fairness</a></li>
-                    <li><a class="dropdown-item my_modal" style='cursor:pointer' btn='wallet_btn' data-bs-toggle="modal" data-bs-target="#exampleModal"><i style='color:#102d52;' data-feather="dollar-sign"></i> Deposit</a></li>
-                    <li><a class="dropdown-item my_modal" style='cursor:pointer' btn='support_btn' data-bs-toggle="modal" data-bs-target="#exampleModal"><i style='color:#102d52;' data-feather="headphones"></i> Support</a></li>
-                    <li><a class="dropdown-item my_modal" style='cursor:pointer' btn='withdraw_btn' data-bs-toggle="modal" data-bs-target="#exampleModal"><i style='color:#102d52;' data-feather="credit-card"></i> Withdraw</a></li>
+                    <li><a class="dropdown-item my_modal" style='cursor:pointer' btn='activity_btn' data-bs-toggle="modal" data-bs-target="#exampleModal"><i class='mobile-feather-icon' style='color:#102d52;' data-feather="activity"></i> Activity</a></li>
+                    <li><a class="dropdown-item my_modal" style='cursor:pointer' btn='fairness_btn' data-bs-toggle="modal" data-bs-target="#exampleModal"><i class='mobile-feather-icon' style='color:#102d52;' data-feather="clipboard"></i> Fairness</a></li>
+                    <li><a class="dropdown-item my_modal" style='cursor:pointer' btn='wallet_btn' data-bs-toggle="modal" data-bs-target="#exampleModal"><i class='mobile-feather-icon' style='color:#102d52;' data-feather="dollar-sign"></i> Deposit</a></li>
+                    <li><a class="dropdown-item my_modal" style='cursor:pointer' btn='support_btn' data-bs-toggle="modal" data-bs-target="#exampleModal"><i class='mobile-feather-icon' style='color:#102d52;' data-feather="headphones"></i> Support</a></li>
+                    <li><a class="dropdown-item my_modal" style='cursor:pointer' btn='withdraw_btn' data-bs-toggle="modal" data-bs-target="#exampleModal"><i class='mobile-feather-icon' style='color:#102d52;' data-feather="credit-card"></i> Withdraw</a></li>
+                    <li><a class="dropdown-item my_modal" style='cursor:pointer' btn='transaction_btn' data-bs-toggle="modal" data-bs-target="#exampleModal"><i class='mobile-feather-icon' style='color:#102d52;' data-feather="edit"></i> Transactions</a></li>
                     <?php if (isset($user_id) && !empty($user_id)) { ?>
-                        <li><a class="dropdown-item" href="<?= base_url('logout') ?>"><i style='color:#102d52;' data-feather="log-out"></i> Logout</a></li>
+                        <li><a class="dropdown-item" href="<?= base_url('logout') ?>"><i class='mobile-feather-icon' style='color:#102d52;' data-feather="log-out"></i> Logout</a></li>
                     <?php } ?>
                 </ul>
             </div>
@@ -469,32 +579,32 @@ if (isset($user_id) && !empty($user_id)) {
                 <div class='col-xs-12 col-md-6 col-lg-8'>
                     <div class='panel'>
                         <div class='next-round'>
-                            <p class='h4 text-light'> Next Round starts at <span id='timer'><?= date('H:i:s'); ?></span></p>
+                            <p class='h4 text-light mobile-font'> Next Round starts at <span id='timer'><?= date('H:i:s'); ?></span></p>
                         </div>
                         <div class='d-flex justify-content-center bg-light rounded'>
-                            <div class='w50- m-4 ms-0 me-0 btn-light' style='border-top-left-radius:10px;border-bottom-left-radius:10px;'>
-                                <img class='dice1 mt-2' src='<?= base_url('public/images/dice_' . $last_roll[0]['dice1'] . '.png') ?>' />
+                            <div class='dice-margin btn-light' style='border-top-left-radius:10px;border-bottom-left-radius:10px;'>
+                                <img class='dice1 mt-2' style='width:100%;min-width:100px;' src='<?= base_url('public/images/dice_' . $last_roll[0]['dice1'] . '.webp') ?>' />
                             </div>
-                            <div class='w50- m-4 ms-0 me-0 btn-light' style='border-top-left-radius:10px;border-bottom-left-radius:10px;'>
-                                <img class='dice1 mt-2' src='<?= base_url('public/images/dice_' . $last_roll[0]['dice2'] . '.png') ?>' />
+                            <div class='dice-margin btn-light' style='border-top-left-radius:10px;border-bottom-left-radius:10px;'>
+                                <img class='dice1 mt-2' style='width:100%;min-width:100px;' src='<?= base_url('public/images/dice_' . $last_roll[0]['dice2'] . '.webp') ?>' />
                             </div>
                         </div>
-                        <label class="form-label small text-light" style='font-weight:600;color:#a3b0bb'>Bet for next round ?</label>
+                        <label class="form-label small text-light mobile-font" style='font-weight:600;color:#a3b0bb'>Previous round winner : <?= $total_option.' ( '. $last_roll[0]['total'].' )'?> , Bet for next round ?</label>
                         <div class='rounded-1 p-3 mb-4' style='background:#ffffff14'>
                             <!-- <div class='d-flex p-0 col-12'> -->
                             <div class='row m-0'>
-                                <div class='col-4 p-1'>
-                                    <input type='text' autocomplete="off" onkeypress="return event.charCode >= 48 && event.charCode <= 57" class='mb-1 form-control w-100 amount_btn' placeholder='AMOUNT' id='amount' />
-                                    <input type='text' readonly style='background:#10242a' id='win' placeholder='WIN' class='mb-1 form-control w-100 amount_btn' />
+                                <div class='col-6 col-md-4 p-1'>
+                                    <input type='text' autocomplete="off" onkeypress="return event.charCode >= 48 && event.charCode <= 57" class='mb-1 form-control w-100 amount_btn mobile-font' placeholder='AMOUNT' id='amount' />
+                                    <input type='text' readonly style='background:#10242a' id='win' placeholder='WIN' class='mobile-font mb-1 form-control w-100 amount_btn' />
                                 </div>
 
-                                <div class='col-4 p-1'>
-                                    <button type='button' class="mb-1 even w-100 btn three">EVEN</button>
-                                    <button type='button' class="mb-1 odd w-100 btn three">ODD</button>
+                                <div class='col-6 col-md-4 p-1'>
+                                    <button type='button' class="mobile-font mb-1 even w-100 btn three">EVEN</button>
+                                    <button type='button' class="mobile-font mb-1 odd w-100 btn three">ODD</button>
                                 </div>
 
-                                <div class='col-4 p-1'>
-                                    <button type='button' class="mb-1 h-100 w-100 btn amount_btn reset">RESET</button>
+                                <div class='col-12 col-md-4 p-1'>
+                                    <button type='button' class="mobile-font mb-1 h-100 w-100 btn amount_btn reset">RESET</button>
                                 </div>
                             </div>
 
@@ -511,70 +621,39 @@ if (isset($user_id) && !empty($user_id)) {
                             <div class='row m-0 mt-1 p-1'>
                                 <!-- <input type="range" class="form-range slider" min="2" max="12" step="1" id="customRange3"> -->
                                 <!-- <button class='text-white btn bet_btn'>BET</button> -->
-                                <a href="" class='butn butn__new w-100'><span>PLACE BET</span></a>
+                                <a href="" class='butn butn__new w-100 mobile-font'><span>PLACE BET</span></a>
                                 <!-- <button class='butn btn butn__new w-100'>PLACE BET</button> -->
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class='col-xs-12 col-md-6 col-lg-4 scoreboard' style='height:450px;padding:0px 50px 0px 50px;'>
-                    <div class='row table-responsive' style='width:180px;height:200px;border-radius:10px;margin:auto;margin-top:150px !important; '>
-                        <table class='table table-sm text-center' style='color:#a3b0bb'>
-                            <thead>
-                                <th>Wagered</th>
-                                <th>Profit</th>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td class='green'>33<i class="ms-1 fa fa-dollar" style="font-size:15px;color:#a3b0bb;"></i></td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td class='green'>33<i class="ms-1 fa fa-dollar" style="font-size:15px;color:#a3b0bb;"></i></td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td class='green'>33<i class="ms-1 fa fa-dollar" style="font-size:15px;color:#a3b0bb;"></i></td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td class='green'>33<i class="ms-1 fa fa-dollar" style="font-size:15px;color:#a3b0bb;"></i></td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td class='green'>33<i class="ms-1 fa fa-dollar" style="font-size:15px;color:#a3b0bb;"></i></td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td class='green'>33<i class="ms-1 fa fa-dollar" style="font-size:15px;color:#a3b0bb;"></i></td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td class='green'>33<i class="ms-1 fa fa-dollar" style="font-size:15px;color:#a3b0bb;"></i></td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td class='green'>33<i class="ms-1 fa fa-dollar" style="font-size:15px;color:#a3b0bb;"></i></td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td class='green'>33<i class="ms-1 fa fa-dollar" style="font-size:15px;color:#a3b0bb;"></i></td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td class='green'>33<i class="ms-1 fa fa-dollar" style="font-size:15px;color:#a3b0bb;"></i></td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td class='green'>33<i class="ms-1 fa fa-dollar" style="font-size:15px;color:#a3b0bb;"></i></td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td class='green'>33<i class="ms-1 fa fa-dollar" style="font-size:15px;color:#a3b0bb;"></i></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                <div class='scoreboard-box d-flex justify-content-center col-lg-4 col-md-6 mb-3'>
+                    <div class='scoreboard'>
+                        <div class='d-flex justify-content-center mb-2' style='margin-left:11px;background:#556672'>
+                            <p class='text-light m-0 mobile-font'>Your bet history</p>
+                        </div>
+                        <div class='row table-responsive' style='width:80%;margin:auto;'>
+                            <table class='table table-sm text-center  mobile-font' style='color:#a3b0bb;'>
+                                <thead>
+                                    <th>Bet option</th>
+                                    <th>Wagered</th>
+                                </thead>
+                                <tbody>
+                                    <?php if (isset($user_bet_history) && !empty($user_bet_history)) {
+                                        foreach ($user_bet_history as $row) { ?>
+                                            <tr>
+                                                <td><?= $row['betoption']; ?></td>
+                                                <td class='green'><?= $row['amount']; ?><i class="ms-1 fa fa-dollar" style="font-size:15px;color:#a3b0bb;"></i></td>
+                                            </tr>
+                                        <?php }
+                                    } else { ?>
+                                        <tr>
+                                            <td colspan='2'> No bets found</td>
+                                        </tr>
+                                    <?php } ?>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -583,19 +662,19 @@ if (isset($user_id) && !empty($user_id)) {
     <section id='footer'>
         <div class='footer w-100 mt-5' style='display:flex;'>
             <div class='text-center p-1 w-25 my_modal' style="background-color: #111a1c;" btn='activity_btn' data-bs-toggle="modal" data-bs-target="#exampleModal">
-                <i style='color:#f2f2f2' data-feather="activity"></i><br>
+                <i style='color:#f2f2f2' class="mobile-feather-icon" data-feather="activity"></i><br>
                 <span class='small' style='font-size:12px;color:#a3b0bb'>Activity</span>
             </div>
             <div class='text-center p-1 w-25 my_modal' style="background-color: #111a1c;" btn='fairness_btn' data-bs-toggle="modal" data-bs-target="#exampleModal">
-                <i style='color:#f2f2f2' data-feather="clipboard"></i><br>
+                <i style='color:#f2f2f2'class="mobile-feather-icon" data-feather="clipboard"></i><br>
                 <span class='small' style='font-size:12px;color:#a3b0bb'>Fairness</span>
             </div>
             <div class='text-center p-1 w-25 my_modal' style="background-color: #111a1c;" btn='wallet_btn' data-bs-toggle="modal" data-bs-target="#exampleModal">
-                <i style='color:#f2f2f2' data-feather="dollar-sign"></i><br>
+                <i style='color:#f2f2f2' class="mobile-feather-icon" data-feather="dollar-sign"></i><br>
                 <span class='small' style='font-size:12px;color:#a3b0bb'>Deposit</span>
             </div>
             <div class='text-center p-1 w-25 my_modal' style="background-color: #111a1c;" btn='support_btn' data-bs-toggle="modal" data-bs-target="#exampleModal">
-                <i style='color:#f2f2f2' data-feather="headphones"></i><br>
+                <i style='color:#f2f2f2' class="mobile-feather-icon" data-feather="headphones"></i><br>
                 <span class='small' style='font-size:12px;color:#a3b0bb'>Support</span>
             </div>
         </div>
@@ -605,101 +684,94 @@ if (isset($user_id) && !empty($user_id)) {
         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
-                    <div class="modal-header btn-primary" style=' background-color:#102d52 !important'>
-                        <h5 class="modal-title" id="exampleModalLabel">Previous Activity</h5>
-                        <button type="button" class="btn close-modal-btn" data-bs-dismiss="modal" aria-label="Close">
-                            <i class="fa fa-close" style="font-size:30px;color:#fff;"></i><br>
+                    <div class="modal-header btn-primary bg_dark text-light">
+                        <h6 class="mobile-font-heading-2 modal-title" id="exampleModalLabel"></h6>
+                        <button type="button" class="btn close-modal-btn p-0" data-bs-dismiss="modal" aria-label="Close">
+                            <i class="fa fa-close" style="font-size:20px;color:#fff;"></i><br>
                         </button>
                     </div>
                     <div class="modal-body" id='activity' style='display:none'>
                         <div class='row p-4 table-responsive' style='max-height:300px;border-radius:10px;'>
-                            <table class='table table-bordered table-striped table-sm text-center' style='color:#a3b0bb'>
+                            <table class='bg_dark table table-bordered table-striped table-sm text-center' style='color:#a3b0bb'>
                                 <thead>
-                                    <th>Previous Rolls</th>
+                                    <th class='mobile-font'>Total</th>
+                                    <th class='mobile-font'>Bet option</th>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                    </tr>
+                                    <?php if(isset($previous_activity) && !empty($previous_activity)){
+                                        foreach($previous_activity as $single){?>
+                                        <tr>
+                                            <td class='mobile-font' style='color:#a3b0bb'><?= $single['total'];?></td>
+                                            <td class='mobile-font' style='color:#a3b0bb'><?php if($single['total'] % 2 == 0){ echo 'EVEN'; }else{ echo 'ODD';}?></td>
+                                        </tr>
+                                    <?php } } ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="modal-body" id='transaction' style='display:none'>
+                        <div class='row p-4 table-responsive' style='max-height:300px;border-radius:10px;'>
+                            <table class='bg_dark table table-bordered table-striped table-sm text-center' style='color:#a3b0bb'>
+                                <thead>
+                                    <th class='mobile-font'>Total</th>
+                                    <th class='mobile-font'>Bet option</th>
+                                </thead>
+                                <tbody>
+                                    <?php if(isset($previous_activity) && !empty($previous_activity)){
+                                        foreach($previous_activity as $single){?>
+                                        <tr>
+                                            <td class='mobile-font' style='color:#a3b0bb'><?= $single['total'];?></td>
+                                            <td class='mobile-font' style='color:#a3b0bb'><?php if($single['total'] % 2 == 0){ echo 'EVEN'; }else{ echo 'ODD';}?></td>
+                                        </tr>
+                                    <?php } } ?>
                                 </tbody>
                             </table>
                         </div>
                     </div>
                     <div class="modal-body" style='color:#102d52' id='fairness' style='display:none'>
-                        This paper proposes a fair electronic gambling scheme for the Internet. The proposed scheme provides a unique link between payment and gambling outcome so that the winner can be ensured to get the payment. Since an optimal fair exchange method is used in gambling message exchange the proposed system guarantees that no one can successfully cheat during a gambling process. Our system requires an off-line Trusted Third Party (TTP). If a cheating occurs, the TTP can resolve the problem and make the gambling process fair.<br>
-                        None of the user information are shared with the third party apps.
+                        <p class='m-0 mobile-font'>
+                            This paper proposes a fair electronic gambling scheme for the Internet. The proposed scheme provides a unique link between payment and gambling outcome so that the winner can be ensured to get the payment. Since an optimal fair exchange method is used in gambling message exchange the proposed system guarantees that no one can successfully cheat during a gambling process. Our system requires an off-line Trusted Third Party (TTP). If a cheating occurs, the TTP can resolve the problem and make the gambling process fair.<br>
+                            None of the user information are shared with the third party apps.
+                        </p>
                     </div>
                     <div class="modal-body" id='wallet' style='display:none'>
                         <div class='row'>
-                            <!-- <img src='<?= base_url('public/images/coupon.png');?>'/> -->
-                            <?php if($first_deposit == 1){?>
+                            <!-- <img src='<?= base_url('public/images/coupon.webp'); ?>'/> -->
+                            <?php if ($first_deposit == 1) { ?>
                                 <p class="bg-danger text-light w-auto m-auto mb-3">Get free 300$ on your First Deposit</p>
                             <?php } ?>
-                            <label class='form-check-label'>Deposit</label>
+                            <label class='form-check-label mobile-font'>Deposit</label>
                             <div class='p-3 pt-2'>
-                                <input type='text' value='' placeholder='Amount' onkeypress="return event.charCode >= 48 && event.charCode <= 57" class='mb-2 deposit-amt form-control rounded'/>
-                                <button id="rzp-button1" class='btn form-control bg_dark text-light rounded deposit-req'> Deposit </button>
+                                <input type='text' value='' autocomplete="off" placeholder='Amount' onkeypress="return event.charCode >= 48 && event.charCode <= 57" class='mobile-font mb-2 deposit-amt form-control rounded' />
+                                <button id="rzp-button1" class='mobile-font btn form-control bg_dark text-light rounded deposit-req'> Deposit </button>
                             </div>
                         </div>
                     </div>
                     <div class="modal-body" id='withdraw' style='display:none'>
                         <div class='row'>
-                            <label class='form-check-label'>Withdraw</label>
+                            <p class='m-0 form-check-label mobile-font' style='line-height:1.2em;'>Withdraw</p>
                             <div class='p-3 pt-2'>
-                                <input type='text' placeholder='Amount' onkeypress="return event.charCode >= 48 && event.charCode <= 57 " class='mb-2 withdraw-amt form-control rounded' />
-                                <button class='btn form-control bg_dark text-light rounded withdraw-req'> Withdraw </button>
+                                <input type='text' autocomplete="off" placeholder='Amount' onkeypress="return event.charCode >= 48 && event.charCode <= 57 " class='mobile-font mb-2 withdraw-amt form-control rounded' />
+                                <button class='btn form-control mobile-font bg_dark text-light rounded withdraw-req'> Withdraw </button>
                             </div>
                         </div>
                     </div>
-                    <div class="modal-body" id='settings' style='display:none'>
-                        settings<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>.<br>
-                    </div>
                     <div class="modal-body" id='support' style='display:none'>
-                        <span>Drop us a message and we will reply you back shortly</span>
-                        <textarea class='p-1 mt-2 w-100' rows=4 style='resize:none'></textarea><br>
+                        <p class='m-0 mobile-font' style='line-height:1.4em;'> Drop us a message and we will reply you back shortly</p>
+                        <textarea class='mobile-font p-1 mt-2 w-100' rows=4 style='resize:none'></textarea><br>
                         <div class='d-flex justify-content-center'>
-                            <button class='w-50 btn' style='background:#102d52;color:#fff'>Send</button>
+                            <button class='w-50 btn mobile-font' style='background:#102d52;color:#fff'>Send</button>
                         </div>
                     </div>
                     <div class="modal-body" id='register' style='display:none'>
                         <form id='register_form'>
-                            <input type="text" class='form-control mb-1' name='user_name' placeholder='Username' />
+                            <input type="text" autocomplete="off" class='form-control mb-1' name='user_name' placeholder='Username' />
                             <div class="text-danger error-text" id="error-user_name"></div>
-                            <input type="text" class='form-control mb-1' name='user_email' placeholder='Email' />
+                            <input type="text" autocomplete="off" class='form-control mb-1' name='user_email' placeholder='Email' />
                             <div class="text-danger error-text" id="error-user_email"></div>
-                            <input type="text" class='form-control mb-1' name='user_phone' onkeypress="return event.charCode >= 48 && event.charCode <= 57 " placeholder='Number' />
+                            <input type="text" autocomplete="off" class='form-control mb-1' name='user_phone' onkeypress="return event.charCode >= 48 && event.charCode <= 57 " placeholder='Number' />
                             <div class="text-danger error-text" id="error-user_phone"></div>
-                            <input type="text" class='form-control mb-1' name='user_password' placeholder='Password' />
+                            <input type="text" autocomplete="off" class='form-control mb-1' name='user_password' placeholder='Password' />
                             <div class="text-danger error-text" id="error-user_password"></div>
 
                             <div class="form-check mb-4">
@@ -716,23 +788,57 @@ if (isset($user_id) && !empty($user_id)) {
                     </div>
                     <div class="modal-body" id='user-edit' style='display:none'>
                         <form id='user_edit_form'>
-                            <input type="text" class='form-control mb-1' name='edit_user_name' value='<?php if(isset($user_info) && !empty($user_info)){ echo $user_info[0]['user_name']; }?>' placeholder='Username' />
-                            <div class="text-danger error-text" id="error-edit_user_name"></div>
-                            <input type="text" class='form-control mb-1' disabled name='edit_user_email' value='<?php if(isset($user_info) && !empty($user_info)){ echo $user_info[0]['user_email']; }?>' placeholder='Email' />
-                            <div class="text-danger error-text" id="error-edit_user_email"></div>
-                            <input type="text" class='form-control mb-1' name='edit_user_phone' value='<?php if(isset($user_info) && !empty($user_info)){ echo $user_info[0]['user_phone']; }?>'  onkeypress="return event.charCode >= 48 && event.charCode <= 57 " placeholder='Number' />
-                            <div class="text-danger error-text" id="error-edit_user_phone"></div>
-                            <input type="text" class='form-control mb-1' name='edit_user_password' value='<?php if(isset($user_info) && !empty($user_info)){ echo $user_info[0]['user_password']; }?>'  placeholder='Password' />
-                            <div class="text-danger error-text" id="error-edit_user_password"></div>
-                            <div class='d-flex justify-content-center'>
-                                <button class='w-50 btn' style='background:#102d52;color:#fff'>Update</button>
+                            <p style='font-weight: 700;' class='mobile-font-heading'> Personal Information</p>
+                            <input type="text" autocomplete="off" class='mobile-font form-control mb-1' name='edit_user_name' value='<?php if (isset($user_info) && !empty($user_info)) {
+                                                                                                                                            echo $user_info[0]['user_name'];
+                                                                                                                                        } ?>' placeholder='Username' />
+                            <div class="text-danger error-text mb-1" id="error-edit_user_name"></div>
+                            <input type="text" autocomplete="off" class='mobile-font form-control mb-1' disabled name='edit_user_email' value='<?php if (isset($user_info) && !empty($user_info)) {
+                                                                                                                                                    echo $user_info[0]['user_email'];
+                                                                                                                                                } ?>' placeholder='Email' />
+                            <div class="text-danger error-text mb-1" id="error-edit_user_email"></div>
+                            <input type="text" autocomplete="off" class='mobile-font form-control mb-1' name='edit_user_phone' value='<?php if (isset($user_info) && !empty($user_info)) {
+                                                                                                                                            echo $user_info[0]['user_phone'];
+                                                                                                                                        } ?>' onkeypress="return event.charCode >= 48 && event.charCode <= 57 " placeholder='Number' />
+                            <div class="text-danger error-text mb-1" id="error-edit_user_phone"></div>
+                            <p style='font-weight: 700;' class='mobile-font-heading'> Bank Details </p>
+
+                            <div class='d-flex' style='align-items:center'>
+                                <input type="radio" id='upi' class='payment-method me-1' value='UPI' name="payment-method" <?php if (isset($user_info) && !empty($user_info) && $user_info[0]['user_upi'] != '') { ?> checked <?php } ?>> <label for="upi" class='mobile-font' style='font-size:14px;'>UPI</label><br>
+                            </div>
+                            <div class='d-flex' style='align-items:center'>
+                                <input type="radio" id='bank-detail' class='payment-method me-1' value='bank-account' name="payment-method" <?php if (isset($user_info) && !empty($user_info) && $user_info[0]['user_account_no'] != '') { ?> checked <?php } ?>> <label style='font-size:14px;' class='mobile-font' for="bank-detail">Bank Details </label>
+                            </div>
+
+                            <input type="text" autocomplete="off" class='mobile-font form-control mb-1 mt-1 upi-details' name='user_upi' value='<?php if (isset($user_info) && !empty($user_info)) {
+                                                                                                                                                    echo $user_info[0]['user_upi'];
+                                                                                                                                                } ?>' placeholder='UPi ID or Number' />
+                            <div class="text-danger error-text mb-1" id="error-user_upi"></div>
+
+                            <div id='user-bank-details' style='display:none'>
+                                <input type="text" autocomplete="off" class='mobile-font form-control mb-1 mt-1' name='user_account_number' value='<?php if (isset($user_info) && !empty($user_info)) {
+                                                                                                                                                        echo $user_info[0]['user_account_no'];
+                                                                                                                                                    } ?>' placeholder='Account Number' />
+                                <div class="text-danger error-text mb-1" id="error-user_account_number"></div>
+                                <input type="text" autocomplete="off" class='mobile-font form-control mb-1 mt-1' name='user_account_name' value='<?php if (isset($user_info) && !empty($user_info)) {
+                                                                                                                                                        echo $user_info[0]['user_account_name'];
+                                                                                                                                                    } ?>' placeholder='Account Name' />
+                                <div class="text-danger error-text mb-1" id="error-user_account_name"></div>
+                                <input type="text" autocomplete="off" class='mobile-font form-control mb-1 mt-1' name='user_account_ifsc' value='<?php if (isset($user_info) && !empty($user_info)) {
+                                                                                                                                                        echo $user_info[0]['user_account_ifsc'];
+                                                                                                                                                    } ?>' placeholder='IFSC' />
+                                <div class="text-danger error-text mb-1" id="error-user_account_ifsc"></div>
+                            </div>
+
+                            <div class='d-flex justify-content-center mt-3'>
+                                <button class='w-50 btn bg_dark text-light mobile-font'>Update</button>
                             </div>
                         </form>
                     </div>
                     <div class="modal-body" id='login' style='display:none'>
                         <form id='login_form'>
-                            <input type="text" class='form-control mb-2' name='email' placeholder='Email' />
-                            <input type="text" class='form-control' name='password' placeholder='Password' />
+                            <input type="text" autocomplete="off" class='form-control mb-2' name='email' placeholder='Email' />
+                            <input type="text" autocomplete="off" class='form-control' name='password' placeholder='Password' />
                             <div class='row text-right mb-2 login_msg' style='display:none'>
                                 <span class='text-danger error-text'> Email or Password is Invalid </span>
                             </div>
@@ -746,12 +852,39 @@ if (isset($user_id) && !empty($user_id)) {
         </div>
     </section>
 
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+    <script src="<?= base_url('assets/js/bootstrap.js'); ?>"></script>
+    <script src="<?= base_url('assets/js/feather.js'); ?>"></script>
+    <script src="<?= base_url('assets/js/jquery.js'); ?>"></script>
+    <script src="<?= base_url('assets/js/font-awesome.js'); ?>"></script>
     <script type="text/javascript" src="<?= base_url('/assets/js/moment.js'); ?>"></script>
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script type="text/javascript" src="<?= base_url('/assets/js/razorpay-checkout.js'); ?>"></script>
+    <script type="text/javascript" src="<?= base_url('/assets/js/toastify.js'); ?>"></script>
     <script type="text/javascript" src="<?= base_url('/assets/js/razorpay.js'); ?>"></script>
+    <!-- <script src="https://checkout.razorpay.com/v1/checkout.js"></script> -->
+    <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script> -->
+
     <script>
         $(document).ready(function() {
+            <?php if (isset($user_info) && !empty($user_info) && $user_info[0]['user_upi'] != '') { ?>
+                $('.upi-details').css('display', 'block');
+                $('#user-bank-details').css('display', 'none');
+            <?php } else { ?>
+                $('#user-bank-details').css('display', 'block');
+                $('.upi-details').css('display', 'none');
+            <?php } ?>
+
+            $('.payment-method').click(function() {
+                // alert($(this).val());
+                if ($(this).val() == 'UPI') {
+                    $('.upi-details').css('display', 'block');
+                    $('#user-bank-details').css('display', 'none');
+                } else {
+                    $('#user-bank-details').css('display', 'block');
+                    $('.upi-details').css('display', 'none');
+                }
+            });
+
             $('.withdraw-req').click(function() {
                 $.ajax({
                     type: "POST",
@@ -762,7 +895,11 @@ if (isset($user_id) && !empty($user_id)) {
                     cache: false,
                     dataType: "json",
                     success: function(data) {
-                        if (data.result == 500) {
+
+                        if (data.result == 600) {
+                            toast('info', 'Update bank details to withdraw');
+                            return true;
+                        } else if (data.result == 500) {
                             toast('info', 'User cannot be found');
                             return true;
                         } else if (data.result == 400) {
@@ -826,6 +963,7 @@ if (isset($user_id) && !empty($user_id)) {
                     $('#support').css('display', 'none');
                     $('#user-edit').css('display', 'none');
                     $('#withdraw').css('display', 'none');
+                    $('#transaction').css('display', 'none');
                     $('.modal-title').html('Login');
                     // alert();
                 <?php } else { ?>
@@ -928,7 +1066,7 @@ if (isset($user_id) && !empty($user_id)) {
                 });
             });
 
-            
+
             $('#user_edit_form').submit(function(e) {
                 e.preventDefault();
                 $.ajax({
@@ -958,6 +1096,9 @@ if (isset($user_id) && !empty($user_id)) {
                         } else {
                             $('.close-modal-btn').trigger('click');
                             toast('info', 'User Details Updated !');
+                            setTimeout(function() {
+                                window.location.reload();
+                            }, 2000);
                         }
                     }
                 });
@@ -975,6 +1116,7 @@ if (isset($user_id) && !empty($user_id)) {
                     $('#login').css('display', 'none');
                     $('.modal-title').html('Previous Activity');
                     $('#withdraw').css('display', 'none');
+                        $('#transaction').css('display', 'none');
                     $('#user-edit').css('display', 'none');
                 }
                 if ($(this).attr('btn') == 'fairness_btn') {
@@ -987,6 +1129,7 @@ if (isset($user_id) && !empty($user_id)) {
                     $('#login').css('display', 'none');
                     $('.modal-title').html('Fairness');
                     $('#withdraw').css('display', 'none');
+                        $('#transaction').css('display', 'none');
                     $('#user-edit').css('display', 'none');
                 }
                 if ($(this).attr('btn') == 'support_btn') {
@@ -999,6 +1142,7 @@ if (isset($user_id) && !empty($user_id)) {
                     $('#login').css('display', 'none');
                     $('.modal-title').html('Support');
                     $('#withdraw').css('display', 'none');
+                        $('#transaction').css('display', 'none');
                     $('#user-edit').css('display', 'none');
                 }
                 if ($(this).attr('id') == 'register_btn') {
@@ -1011,6 +1155,7 @@ if (isset($user_id) && !empty($user_id)) {
                     $('#support').css('display', 'none');
                     $('.modal-title').html('Register');
                     $('#withdraw').css('display', 'none');
+                        $('#transaction').css('display', 'none');
                     $('#user-edit').css('display', 'none');
                 }
                 if ($(this).attr('id') == 'login_btn') {
@@ -1024,6 +1169,7 @@ if (isset($user_id) && !empty($user_id)) {
                     $('#support').css('display', 'none');
                     $('.modal-title').html('Login');
                     $('#withdraw').css('display', 'none');
+                        $('#transaction').css('display', 'none');
                 }
                 if ($(this).attr('btn') == 'withdraw_btn') {
                     <?php if (isset($user_id) && !empty($user_id)) { ?>
@@ -1036,6 +1182,7 @@ if (isset($user_id) && !empty($user_id)) {
                         $('#register').css('display', 'none');
                         $('#login').css('display', 'none');
                         $('#user-edit').css('display', 'none');
+                        $('#transaction').css('display', 'none');
                         $('.modal-title').html('Withdraw');
                     <?php } else { ?>
                         $('#activity').css('display', 'none');
@@ -1047,6 +1194,7 @@ if (isset($user_id) && !empty($user_id)) {
                         $('#login').css('display', 'block');
                         $('#support').css('display', 'none');
                         $('#withdraw').css('display', 'none');
+                        $('#transaction').css('display', 'none');
                         $('.modal-title').html('Login');
                     <?php } ?>
                 }
@@ -1057,6 +1205,7 @@ if (isset($user_id) && !empty($user_id)) {
                         $('#settings').css('display', 'none');
                         $('#wallet').css('display', 'block');
                         $('#withdraw').css('display', 'none');
+                        $('#transaction').css('display', 'none');
                         $('#support').css('display', 'none');
                         $('#user-edit').css('display', 'none');
                         $('#register').css('display', 'none');
@@ -1072,10 +1221,11 @@ if (isset($user_id) && !empty($user_id)) {
                         $('#login').css('display', 'block');
                         $('#support').css('display', 'none');
                         $('#withdraw').css('display', 'none');
+                        $('#transaction').css('display', 'none');
                         $('.modal-title').html('Login');
                     <?php } ?>
                 }
-                
+
                 if ($(this).attr('btn') == 'user-edit') {
                     <?php if (isset($user_id) && !empty($user_id)) { ?>
                         $('#activity').css('display', 'none');
@@ -1084,11 +1234,41 @@ if (isset($user_id) && !empty($user_id)) {
                         $('#wallet').css('display', 'none');
                         $('#user-edit').css('display', 'block');
                         $('#withdraw').css('display', 'none');
+                        $('#transaction').css('display', 'none');
                         $('#support').css('display', 'none');
                         $('#register').css('display', 'none');
                         $('#login').css('display', 'none');
                         $('.modal-title').html('User Details');
                     <?php } else { ?>
+                        $('#activity').css('display', 'none');
+                        $('#fairness').css('display', 'none');
+                        $('#settings').css('display', 'none');
+                        $('#user-edit').css('display', 'none');
+                        $('#wallet').css('display', 'none');
+                        $('#register').css('display', 'none');
+                        $('#login').css('display', 'block');
+                        $('#support').css('display', 'none');
+                        $('#withdraw').css('display', 'none');
+                        $('#transaction').css('display', 'none');
+                        $('.modal-title').html('Login');
+                    <?php } ?>
+                }
+                
+                if ($(this).attr('btn') == 'transaction_btn') {
+                    <?php if (isset($user_id) && !empty($user_id)) { ?>
+                        $('#activity').css('display', 'none');
+                        $('#fairness').css('display', 'none');
+                        $('#settings').css('display', 'none');
+                        $('#wallet').css('display', 'none');
+                        $('#user-edit').css('display', 'none');
+                        $('#transaction').css('display', 'block');
+                        $('#withdraw').css('display', 'none');
+                        $('#support').css('display', 'none');
+                        $('#register').css('display', 'none');
+                        $('#login').css('display', 'none');
+                        $('.modal-title').html('Transactions');
+                    <?php } else { ?>
+                        $('#transaction').css('display', 'none');
                         $('#activity').css('display', 'none');
                         $('#fairness').css('display', 'none');
                         $('#settings').css('display', 'none');
@@ -1141,8 +1321,8 @@ if (isset($user_id) && !empty($user_id)) {
                 type: "POST",
                 url: "<?= base_url('update_user_balance') ?>",
                 data: {
-                    amount:amount,
-                    payment_id:payment_id
+                    amount: amount,
+                    payment_id: payment_id
                 },
                 // contentType: false,
                 cache: false,
@@ -1154,7 +1334,7 @@ if (isset($user_id) && !empty($user_id)) {
                         $('.user_coins').val(data.user_balance);
                         $('.close-modal-btn').trigger('click');
                         $('.deposit-amt').val('');
-                    }else{
+                    } else {
                         toast('info', 'Something went wrong !');
                     }
                 }

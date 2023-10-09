@@ -12,8 +12,9 @@ class Game extends BaseController
             'total' => '3',
         );
         $this->db->table('rolls')->insert($arr);
+        echo 'rolled succesfully';
         // echo 'roll';exit;
-        return view('index');
+        // return view('index');
     }
 
     public function bet()
@@ -100,11 +101,17 @@ class Game extends BaseController
         }
 
         $user_balance = $this->db->table('coin')->where('user_id', $userid)->get()->getResultArray();
+        $user_info = $this->db->table('user')->where('user_id', $userid)->get()->getResultArray();
         if ($withdraw_amt > $user_balance[0]['coins']) {
             $json['result'] = 400;
             return $this->response->setJSON($json);
         }
 
+        if($user_info[0]['user_upi'] == '' && $user_info[0]['user_account_no'] == '' && $user_info[0]['user_account_name'] == '' && $user_info[0]['user_account_ifsc'] == ''){
+            $json['result'] = 600;
+            return $this->response->setJSON($json);
+        }
+        
         $arr = array(
             'with_user_amount' => $_POST['amount'],
             'with_user_id' => $userid,
