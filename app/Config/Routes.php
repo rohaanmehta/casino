@@ -38,6 +38,10 @@ $routes->get('roll', 'Game::roll');
 
 //admin
 $routes->get('dashboard', 'Dashboard::view');
+$routes->get('admin_users', 'Dashboard::users');
+$routes->get('admin_deposits', 'Dashboard::deposit');
+$routes->get('admin_withdraw', 'Dashboard::withdraw');
+$routes->get('admin_msgs', 'Dashboard::msgs');
 
 
 //auth routes
