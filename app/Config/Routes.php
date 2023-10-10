@@ -36,14 +36,6 @@ $routes->post('register', 'Login::register');
 $routes->post('user_edit_form', 'Login::user_edit_form');
 $routes->get('roll', 'Game::roll');
 
-//admin
-$routes->get('dashboard', 'Dashboard::view');
-$routes->get('admin_users', 'Dashboard::users');
-$routes->get('admin_deposits', 'Dashboard::deposit');
-$routes->get('admin_withdraw', 'Dashboard::withdraw');
-$routes->get('admin_msgs', 'Dashboard::msgs');
-
-
 //auth routes
 $routes->post('bet', 'Game::bet');
 $routes->post('withdraw', 'Game::withdraw');
@@ -52,23 +44,14 @@ $routes->post('update_user_balance', 'Game::update_user_balance');
 
 
 
-// $routes->group("/", ["filter" => "auth"], function ($routes) {
-//     $routes->get('csv/?(:any)', 'Csv::view/$1');
-//     $routes->get('dashboard', 'Dashboard::view');
-//     $routes->get('unlink', 'Csv::unlink');
-//     $routes->post('file_upload', 'Csv::file_upload');
-//     $routes->post('logout', 'Login::logout');
-//     $routes->get('usermaster', 'Usermenu::view');
-//     $routes->get('userform', 'userform::view');
-//     $routes->get('delete_User/?(:any)', 'userform::delete_User/$1');
-//     $routes->get('edit_user/?(:any)', 'userform::edit_user/$1');
-//     $routes->post('add_User', 'userform::add_User');
-//     $routes->get('delete_csv/?(:any)', 'Csv::delete_csv/$1');
-//     $routes->get('approve_csv/?(:any)', 'Csv::approve_csv/$1');
-//     $routes->post('download_csv', 'Download::download_csv');
-//     $routes->post('unlink', 'Download::unlink');
-//     $routes->get('download_view', 'Download::view');
-// });
+$routes->group("/", ["filter" => "auth"], function ($routes) {
+    //admin
+    $routes->get('dashboard', 'Dashboard::view');
+    $routes->get('admin_users', 'Dashboard::users');
+    $routes->get('admin_deposits', 'Dashboard::deposit');
+    $routes->get('admin_withdraw', 'Dashboard::withdraw');
+    $routes->get('admin_msgs', 'Dashboard::msgs');
+});
 
 /*
  * --------------------------------------------------------------------

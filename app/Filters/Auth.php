@@ -28,8 +28,8 @@ class Auth implements FilterInterface
     public function before(RequestInterface $request, $arguments = null)
     {
         $session = session();
-        if($session->get('username') == ''){
-            return redirect()->to(base_url('/csv'));
+        if($session->get('role') != 'Admin'){
+            return redirect()->to(base_url());
         } 
     }
 

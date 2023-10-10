@@ -30,6 +30,11 @@ class Login extends BaseController
             $user = $this->db->table('user')->where($data)->get()->getResultArray();
             $this->session->set('username',$user[0]['user_name']);
             $this->session->set('user_id',$user[0]['user_id']);
+            if($user[0]['user_role']){
+                $this->session->set('role','Admin');
+            }else{
+                $this->session->set('role','User');
+            }
             $this->db->table('user')->set($time)->where('user_email',$_POST['email'])->update();
         }
         return $this->response->setJSON($result);
@@ -38,6 +43,7 @@ class Login extends BaseController
     public function logout(){
         $this->session->remove('username');
         $this->session->remove('user_id');
+        $this->session->remove('role');
         return redirect()->to(base_url('/'));
     }
 

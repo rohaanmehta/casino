@@ -57,4 +57,61 @@ class Dashboard extends BaseController
 
         return view('Admin/user',$data);
     }
+
+    public function deposit(){
+        $perPage=20;
+        if(isset($_GET['count'])){
+            $perPage = $_GET['count'];
+        }
+        $pager = service('pager');
+        $page = (@$_GET['page']) ? $_GET['page'] : 1;
+        $offset = ($page-1) * $perPage;
+        if(isset($_GET['column'])){
+            $data['deposit'] = $this->db->table('deposit')->select('user_name,depo_user_amount,depo_transaction_id,deposit.created_at')->join('user','user.user_id = deposit.depo_user_id')->orderBy($_GET['column'],'ASC')->get($perPage,$offset)->getResultArray();
+        }else{
+            $data['deposit'] = $this->db->table('deposit')->select('user_name,depo_user_amount,depo_transaction_id,deposit.created_at')->join('user','user.user_id = deposit.depo_user_id')->get($perPage,$offset)->getResultArray();
+        }
+        $data['total'] = $this->db->table('deposit')->countAllResults();
+        $data['links'] = $pager->makeLinks($page,$perPage,$data['total']);
+
+        return view('Admin/deposit',$data);
+    }
+
+    public function withdraw(){
+        $perPage=20;
+        if(isset($_GET['count'])){
+            $perPage = $_GET['count'];
+        }
+        $pager = service('pager');
+        $page = (@$_GET['page']) ? $_GET['page'] : 1;
+        $offset = ($page-1) * $perPage;
+        if(isset($_GET['column'])){
+            $data['withdraw'] = $this->db->table('withdraw')->select('id,with_status,user_name,with_user_amount,withdraw.created_at')->join('user','user.user_id = withdraw.with_user_id')->orderBy($_GET['column'],'ASC')->get($perPage,$offset)->getResultArray();
+        }else{
+            $data['withdraw'] = $this->db->table('withdraw')->select('id,with_status,user_name,with_user_amount,withdraw.created_at')->join('user','user.user_id = withdraw.with_user_id')->get($perPage,$offset)->getResultArray();
+        }
+        $data['total'] = $this->db->table('withdraw')->countAllResults();
+        $data['links'] = $pager->makeLinks($page,$perPage,$data['total']);
+
+        return view('Admin/withdraw',$data);
+    }
+
+    public function msgs(){
+        $perPage=20;
+        if(isset($_GET['count'])){
+            $perPage = $_GET['count'];
+        }
+        $pager = service('pager');
+        $page = (@$_GET['page']) ? $_GET['page'] : 1;
+        $offset = ($page-1) * $perPage;
+        if(isset($_GET['column'])){
+            $data['messages'] = $this->db->table('messages')->select('user_name,msg_user_id,msg,messages.created_at')->join('user','user.user_id = messages.msg_user_id')->orderBy($_GET['column'],'ASC')->get($perPage,$offset)->getResultArray();
+        }else{
+            $data['messages'] = $this->db->table('messages')->select('user_name,msg_user_id,msg,messages.created_at')->join('user','user.user_id = messages.msg_user_id')->get($perPage,$offset)->getResultArray();
+        }
+        $data['total'] = $this->db->table('messages')->countAllResults();
+        $data['links'] = $pager->makeLinks($page,$perPage,$data['total']);
+
+        return view('Admin/msg',$data);
+    }
 }

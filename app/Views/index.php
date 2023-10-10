@@ -845,7 +845,7 @@ if($last_roll[0]['total']%2 == 0){
                     <div class="modal-body" id='login' style='display:none'>
                         <form id='login_form'>
                             <input type="text" autocomplete="off" class='form-control mb-2' name='email' placeholder='Email' />
-                            <input type="password" autocomplete="off" class='form-control' name='password' placeholder='Password' />
+                            <input type="password" autocomplete="new-password" class='form-control' name='password' placeholder='Password' />
                             <div class='row text-right mb-2 login_msg' style='display:none'>
                                 <span class='text-danger error-text'> Email or Password is Invalid </span>
                             </div>
