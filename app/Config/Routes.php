@@ -34,12 +34,13 @@ $routes->get('logout', 'Login::logout');
 $routes->post('Auth', 'Login::Auth');
 $routes->post('register', 'Login::register');
 $routes->post('user_edit_form', 'Login::user_edit_form');
-$routes->get('roll', 'Game::roll');
+$routes->get('roll/(:any)', 'Game::roll/$1');
 
 //auth routes
 $routes->post('bet', 'Game::bet');
 $routes->post('withdraw', 'Game::withdraw');
 $routes->post('update_user_balance', 'Game::update_user_balance');
+$routes->post('user_send_msg', 'Game::user_send_msg');
 
 
 

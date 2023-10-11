@@ -4,17 +4,20 @@ namespace App\Controllers;
 
 class Game extends BaseController
 {
-    public function roll()
+    public function roll($token = null)
     {
-        $arr = array(
-            'dice1' => '1',
-            'dice2' => '2',
-            'total' => '3',
-        );
-        $this->db->table('rolls')->insert($arr);
-        echo 'rolled succesfully';
-        // echo 'roll';exit;
-        // return view('index');
+        if ($token == 'rohaan') {
+            $arr = array(
+                'dice1' => '1',
+                'dice2' => '2',
+                'total' => '3',
+            );
+            $this->db->table('rolls')->insert($arr);
+            echo 'rolled succesfully';
+        } else {
+            // return redirect()->route('404_override');
+            // redirect('set404Override');
+        }
     }
 
     public function bet()
@@ -107,11 +110,11 @@ class Game extends BaseController
             return $this->response->setJSON($json);
         }
 
-        if($user_info[0]['user_upi'] == '' && $user_info[0]['user_account_no'] == '' && $user_info[0]['user_account_name'] == '' && $user_info[0]['user_account_ifsc'] == ''){
+        if ($user_info[0]['user_upi'] == '' && $user_info[0]['user_account_no'] == '' && $user_info[0]['user_account_name'] == '' && $user_info[0]['user_account_ifsc'] == '') {
             $json['result'] = 600;
             return $this->response->setJSON($json);
         }
-        
+
         $arr = array(
             'with_user_amount' => $_POST['amount'],
             'with_user_id' => $userid,
@@ -141,7 +144,7 @@ class Game extends BaseController
         $first_deposit = 0;
 
         $array = array(
-            'depo_user_id' => $userid ,
+            'depo_user_id' => $userid,
             'depo_user_amount' => $amount,
             'depo_transaction_id' => $payment_id
         );
@@ -153,10 +156,10 @@ class Game extends BaseController
 
         if (isset($user_balance) && !empty($user_balance)) {
             //debit amount from user 
-            if($user_balance[0]['first_deposit'] == '1'){
+            if ($user_balance[0]['first_deposit'] == '1') {
                 $first_deposit = 300;
             }
-        // echo'<pre>';print_r($amount);exit;
+            // echo'<pre>';print_r($amount);exit;
 
             $updated_user_balance = $user_balance[0]['coins'] + $amount + $first_deposit;
             $updated_balance['coins'] = $updated_user_balance;
@@ -167,6 +170,21 @@ class Game extends BaseController
                 $json['user_balance'] = $updated_user_balance;
                 $json['result'] = 200;
             }
+        }
+        return $this->response->setJSON($json);
+    }
+
+    public function user_send_msg(){
+        $msg = $_POST['msg'];
+        $data = array(
+            'msg_from' => 'USER',
+            'msg_user_id' => $this->session->get('user_id'),
+            'msg' => $msg,
+        );
+        if ($this->db->table('messages')->insert($data)) {
+            $json['result'] = 200;
+        }else{
+            $json['result'] = 400;
         }
         return $this->response->setJSON($json);
     }

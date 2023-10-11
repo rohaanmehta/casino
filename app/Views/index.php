@@ -12,7 +12,7 @@ if (isset($user_id) && !empty($user_id)) {
     // $coins= '0';
 }
 $total_option = 'ODD';
-if($last_roll[0]['total']%2 == 0){
+if ($last_roll[0]['total'] % 2 == 0) {
     $total_option = 'EVEN';
 }
 ?>
@@ -54,6 +54,7 @@ if($last_roll[0]['total']%2 == 0){
             /* background-color: #102d52 !important; */
             background: linear-gradient(180deg, rgba(2, 0, 36, 1) 0%, rgb(46 61 68) 66%, rgb(46 79 88) 95%)
         }
+
         /* bootstrap csss   */
         button,
         textarea:focus {
@@ -533,6 +534,10 @@ if($last_roll[0]['total']%2 == 0){
         ::-webkit-scrollbar-thumb:hover {
             background: #555;
         }
+
+        .secure-font {
+            -webkit-text-security: disc;
+        }
     </style>
 </head>
 
@@ -588,7 +593,7 @@ if($last_roll[0]['total']%2 == 0){
                                 <img class='dice1 mt-2' style='width:100%;min-width:100px;' src='<?= base_url('public/images/dice_' . $last_roll[0]['dice2'] . '.webp') ?>' />
                             </div>
                         </div>
-                        <label class="form-label small text-light mobile-font" style='font-weight:600;color:#a3b0bb'>Previous round winner : <?= $total_option.' ( '. $last_roll[0]['total'].' )'?> , Bet for next round ?</label>
+                        <label class="form-label small text-light mobile-font" style='font-weight:600;color:#a3b0bb'>Previous round winner : <?= $total_option . ' ( ' . $last_roll[0]['total'] . ' )' ?> , Bet for next round ?</label>
                         <div class='rounded-1 p-3 mb-4' style='background:#ffffff14'>
                             <!-- <div class='d-flex p-0 col-12'> -->
                             <div class='row m-0'>
@@ -665,7 +670,7 @@ if($last_roll[0]['total']%2 == 0){
                 <span class='small' style='font-size:12px;color:#a3b0bb'>Activity</span>
             </div>
             <div class='text-center p-1 w-25 my_modal' style="background-color: #111a1c;" btn='fairness_btn' data-bs-toggle="modal" data-bs-target="#exampleModal">
-                <i style='color:#f2f2f2'class="mobile-feather-icon" data-feather="clipboard"></i><br>
+                <i style='color:#f2f2f2' class="mobile-feather-icon" data-feather="clipboard"></i><br>
                 <span class='small' style='font-size:12px;color:#a3b0bb'>Fairness</span>
             </div>
             <div class='text-center p-1 w-25 my_modal' style="background-color: #111a1c;" btn='wallet_btn' data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -693,17 +698,24 @@ if($last_roll[0]['total']%2 == 0){
                         <div class='row p-4 table-responsive' style='max-height:300px;border-radius:10px;'>
                             <table class='table table-bordered table-striped table-sm text-center' style='background:#10242a;color:#a3b0bb'>
                                 <thead>
+                                    <th class='mobile-font'>Date</th>
                                     <th class='mobile-font'>Total</th>
                                     <th class='mobile-font'>Bet option</th>
                                 </thead>
                                 <tbody>
-                                    <?php if(isset($previous_activity) && !empty($previous_activity)){
-                                        foreach($previous_activity as $single){?>
-                                        <tr>
-                                            <td class='mobile-font' style='color:#a3b0bb'><?= $single['total'];?></td>
-                                            <td class='mobile-font' style='color:#a3b0bb'><?php if($single['total'] % 2 == 0){ echo 'EVEN'; }else{ echo 'ODD';}?></td>
-                                        </tr>
-                                    <?php } } ?>
+                                    <?php if (isset($previous_activity) && !empty($previous_activity)) {
+                                        foreach ($previous_activity as $single) { ?>
+                                            <tr>
+                                                <td class='mobile-font' style='color:#a3b0bb'><?= date('d-m-Y', strtotime($single['created_at'])); ?></td>
+                                                <td class='mobile-font' style='color:#a3b0bb'><?= $single['total']; ?></td>
+                                                <td class='mobile-font' style='color:#a3b0bb'><?php if ($single['total'] % 2 == 0) {
+                                                                                                    echo 'EVEN';
+                                                                                                } else {
+                                                                                                    echo 'ODD';
+                                                                                                } ?></td>
+                                            </tr>
+                                    <?php }
+                                    } ?>
                                 </tbody>
                             </table>
                         </div>
@@ -717,20 +729,21 @@ if($last_roll[0]['total']%2 == 0){
                                     <th class='mobile-font'>Status</th>
                                 </thead>
                                 <tbody>
-                                    <?php if(isset($transactions) && !empty($transactions)){
-                                        foreach($transactions as $single2){?>
-                                        <tr>
-                                            <?php if(isset($single2['with_user_amount'])) { ?>
-                                                <td class='mobile-font' style='color:#a3b0bb'> Withdraw</td>
-                                                <td class='mobile-font' style='color:#a3b0bb'><?= $single2['with_user_amount'];?></td>
-                                                <td class='mobile-font' <?php if($single2['with_status'] == 'PENDING'){?>  style="color:#ff4b4b" <?php } else { ?> style="color:#4bffac" <?php }  ?>'> <?= $single2['with_status'];?></td>
-                                            <?php } else { ?>
-                                                <td class='mobile-font' style='color:#a3b0bb'> Deposit</td>
-                                                <td class='mobile-font' style='color:#a3b0bb'><?= $single2['depo_user_amount'];?></td>
-                                                <td class='mobile-font' style='color:#4bffac'>COMPLETED</td>
-                                            <?php } ?>
-                                        </tr>
-                                    <?php } } ?>
+                                    <?php if (isset($transactions) && !empty($transactions)) {
+                                        foreach ($transactions as $single2) { ?>
+                                            <tr>
+                                                <?php if (isset($single2['with_user_amount'])) { ?>
+                                                    <td class='mobile-font' style='color:#a3b0bb'> Withdraw</td>
+                                                    <td class='mobile-font' style='color:#a3b0bb'><?= $single2['with_user_amount']; ?></td>
+                                                    <td class='mobile-font' <?php if ($single2['with_status'] == 'PENDING') { ?> style="color:#ff4b4b" <?php } else { ?> style="color:#4bffac" <?php }  ?>'> <?= $single2['with_status']; ?></td>
+                                                <?php } else { ?>
+                                                    <td class='mobile-font' style='color:#a3b0bb'> Deposit</td>
+                                                    <td class='mobile-font' style='color:#a3b0bb'><?= $single2['depo_user_amount']; ?></td>
+                                                    <td class='mobile-font' style='color:#4bffac'>COMPLETED</td>
+                                                <?php } ?>
+                                            </tr>
+                                    <?php }
+                                    } ?>
                                 </tbody>
                             </table>
                         </div>
@@ -764,21 +777,24 @@ if($last_roll[0]['total']%2 == 0){
                         </div>
                     </div>
                     <div class="modal-body" id='support' style='display:none'>
-                        <p class='m-0 mobile-font' style='line-height:1.4em;'> Drop us a message and we will reply you back shortly</p>
-                        <textarea class='mobile-font p-1 mt-2 w-100' rows=4 style='resize:none'></textarea><br>
-                        <div class='d-flex justify-content-center'>
-                            <button class='w-50 btn mobile-font' style='background:#102d52;color:#fff'>Send</button>
-                        </div>
+                        <form id='support_form' autocomplete='off'>
+                            <p class='m-0 mobile-font' style='line-height:1.4em;'> Drop us a message and we will reply you back shortly</p>
+                            <textarea class='support_msg mobile-font p-1 mt-2 w-100' name='msg' rows=3 style='resize:none'></textarea>
+                            <p class='small support_err text-danger mb-0' style='display:none'>This field is required </p><br>
+                            <div class='d-flex justify-content-center'>
+                                <button class='w-50 btn mobile-font' style='background:#102d52;color:#fff'>Send</button>
+                            </div>
+                        </form>
                     </div>
                     <div class="modal-body" id='register' style='display:none'>
-                        <form id='register_form'>
-                            <input type="text" autocomplete="off" class='form-control mb-1' name='user_name' placeholder='Username' />
+                        <form id='register_form' autocomplete='off'>
+                            <input type="text" class='form-control mb-1' name='user_name' placeholder='Username' />
                             <div class="text-danger error-text" id="error-user_name"></div>
-                            <input type="text" autocomplete="off" class='form-control mb-1' name='user_email' placeholder='Email' />
+                            <input type="text" class='form-control mb-1' name='user_email' placeholder='Email' />
                             <div class="text-danger error-text" id="error-user_email"></div>
-                            <input type="text" autocomplete="off" class='form-control mb-1' name='user_phone' onkeypress="return event.charCode >= 48 && event.charCode <= 57 " placeholder='Number' />
+                            <input type="text" class='form-control mb-1' name='user_phone' onkeypress="return event.charCode >= 48 && event.charCode <= 57 " placeholder='Number' />
                             <div class="text-danger error-text" id="error-user_phone"></div>
-                            <input type="password" autocomplete="off" class='form-control mb-1' name='user_password' placeholder='Password' />
+                            <input type="text" class='secure-font form-control mb-1' name='user_password' placeholder='Password' />
                             <div class="text-danger error-text" id="error-user_password"></div>
 
                             <div class="form-check mb-4">
@@ -843,9 +859,9 @@ if($last_roll[0]['total']%2 == 0){
                         </form>
                     </div>
                     <div class="modal-body" id='login' style='display:none'>
-                        <form id='login_form'>
-                            <input type="text" autocomplete="off" class='form-control mb-2' name='email' placeholder='Email' />
-                            <input type="password" autocomplete="new-password" class='form-control' name='password' placeholder='Password' />
+                        <form id='login_form' autocomplete='off'>
+                            <input type="text" class='form-control mb-2' name='email' placeholder='Email' />
+                            <input type="text" class='form-control secure-font' name='password' placeholder='Password' />
                             <div class='row text-right mb-2 login_msg' style='display:none'>
                                 <span class='text-danger error-text'> Email or Password is Invalid </span>
                             </div>
@@ -873,6 +889,7 @@ if($last_roll[0]['total']%2 == 0){
 
     <script>
         $(document).ready(function() {
+
             <?php if (isset($user_info) && !empty($user_info) && $user_info[0]['user_upi'] != '') { ?>
                 $('.upi-details').css('display', 'block');
                 $('#user-bank-details').css('display', 'none');
@@ -919,9 +936,9 @@ if($last_roll[0]['total']%2 == 0){
                             toast('info', 'Withdrawal requested !');
                             // $('.close-modal-btn').trigger('click');
                             // $('.user_coins').val(data.user_balance);
-                            setTimeout(function () {
+                            setTimeout(function() {
                                 window.location.reload();
-                            },2000);
+                            }, 2000);
                         }
                     }
                 });
@@ -1126,7 +1143,7 @@ if($last_roll[0]['total']%2 == 0){
                     $('#login').css('display', 'none');
                     $('.modal-title').html('Previous Activity');
                     $('#withdraw').css('display', 'none');
-                        $('#transaction').css('display', 'none');
+                    $('#transaction').css('display', 'none');
                     $('#user-edit').css('display', 'none');
                 }
                 if ($(this).attr('btn') == 'fairness_btn') {
@@ -1139,21 +1156,35 @@ if($last_roll[0]['total']%2 == 0){
                     $('#login').css('display', 'none');
                     $('.modal-title').html('Fairness');
                     $('#withdraw').css('display', 'none');
-                        $('#transaction').css('display', 'none');
+                    $('#transaction').css('display', 'none');
                     $('#user-edit').css('display', 'none');
                 }
                 if ($(this).attr('btn') == 'support_btn') {
-                    $('#activity').css('display', 'none');
-                    $('#fairness').css('display', 'none');
-                    $('#settings').css('display', 'none');
-                    $('#wallet').css('display', 'none');
-                    $('#support').css('display', 'block');
-                    $('#register').css('display', 'none');
-                    $('#login').css('display', 'none');
-                    $('.modal-title').html('Support');
-                    $('#withdraw').css('display', 'none');
+                    <?php if (isset($user_id) && !empty($user_id)) { ?>
+                        $('#activity').css('display', 'none');
+                        $('#fairness').css('display', 'none');
+                        $('#settings').css('display', 'none');
+                        $('#wallet').css('display', 'none');
+                        $('#support').css('display', 'block');
+                        $('#register').css('display', 'none');
+                        $('#login').css('display', 'none');
+                        $('.modal-title').html('Support');
+                        $('#withdraw').css('display', 'none');
                         $('#transaction').css('display', 'none');
-                    $('#user-edit').css('display', 'none');
+                        $('#user-edit').css('display', 'none');
+                    <?php } else { ?>
+                        $('#activity').css('display', 'none');
+                        $('#fairness').css('display', 'none');
+                        $('#settings').css('display', 'none');
+                        $('#user-edit').css('display', 'none');
+                        $('#wallet').css('display', 'none');
+                        $('#register').css('display', 'none');
+                        $('#login').css('display', 'block');
+                        $('#support').css('display', 'none');
+                        $('#withdraw').css('display', 'none');
+                        $('#transaction').css('display', 'none');
+                        $('.modal-title').html('Login');
+                    <?php } ?>
                 }
                 if ($(this).attr('id') == 'register_btn') {
                     $('#activity').css('display', 'none');
@@ -1165,7 +1196,7 @@ if($last_roll[0]['total']%2 == 0){
                     $('#support').css('display', 'none');
                     $('.modal-title').html('Register');
                     $('#withdraw').css('display', 'none');
-                        $('#transaction').css('display', 'none');
+                    $('#transaction').css('display', 'none');
                     $('#user-edit').css('display', 'none');
                 }
                 if ($(this).attr('id') == 'login_btn') {
@@ -1179,7 +1210,7 @@ if($last_roll[0]['total']%2 == 0){
                     $('#support').css('display', 'none');
                     $('.modal-title').html('Login');
                     $('#withdraw').css('display', 'none');
-                        $('#transaction').css('display', 'none');
+                    $('#transaction').css('display', 'none');
                 }
                 if ($(this).attr('btn') == 'withdraw_btn') {
                     <?php if (isset($user_id) && !empty($user_id)) { ?>
@@ -1263,7 +1294,7 @@ if($last_roll[0]['total']%2 == 0){
                         $('.modal-title').html('Login');
                     <?php } ?>
                 }
-                
+
                 if ($(this).attr('btn') == 'transaction_btn') {
                     <?php if (isset($user_id) && !empty($user_id)) { ?>
                         $('#activity').css('display', 'none');
@@ -1291,6 +1322,37 @@ if($last_roll[0]['total']%2 == 0){
                         $('.modal-title').html('Login');
                     <?php } ?>
                 }
+            });
+
+            $('#support_form').submit(function(e) {
+                e.preventDefault();
+                $('.support_err').css('display', 'none');
+                if ($('.support_msg').val() == '') {
+                    $('.support_err').css('display', 'block');
+                    return true;
+                }
+
+                $.ajax({
+                    type: "POST",
+                    url: "<?= base_url('user_send_msg') ?>",
+                    data: new FormData(this),
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    dataType: "json",
+                    success: function(data) {
+                        // console.log(data.success);
+                        if (data.result == '200') {
+                            toast('info', 'Message Sent, you will receive a reply shortly !');
+                            setTimeout(function() {
+                                window.location.reload();
+                            }, 3000);
+                        } else {
+                            // $('.support_err').css('display', 'block');
+                            toast('info', 'Something went wrong');
+                        }
+                    }
+                });
             });
 
             feather.replace();
@@ -1344,9 +1406,9 @@ if($last_roll[0]['total']%2 == 0){
                         // $('.user_coins').val(data.user_balance);
                         // $('.close-modal-btn').trigger('click');
                         // $('.deposit-amt').val('');
-                        setTimeout(function () {
+                        setTimeout(function() {
                             window.location.reload();
-                        },2000);
+                        }, 2000);
                     } else {
                         toast('info', 'Something went wrong !');
                     }
