@@ -14,6 +14,7 @@ class Home extends BaseController
         $data['previous_activity'] = $this->db->table('rolls')->select('*')->orderBy('id','desc')->limit(100)->get()->getResultArray();
         $data['transactions_deposit'] = $this->db->table('deposit')->select('*')->where('depo_user_id',$userid)->orderBy('created_at','desc')->limit(100)->get()->getResultArray();
         $data['transactions_withdraw'] = $this->db->table('withdraw')->select('*')->where('with_user_id',$userid)->orderBy('created_at','desc')->limit(100)->get()->getResultArray();
+        $data['messages'] = $this->db->table('messages')->select('*')->where('msg_user_id',$userid)->where('msg_from','ADMIN')->orderBy('created_at','desc')->limit(50)->get()->getResultArray();
         $transactions = array();
         $transactions = array_merge($data['transactions_deposit'],$data['transactions_withdraw']);
         // arsort($transactions);

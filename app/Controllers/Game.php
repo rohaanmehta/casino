@@ -131,6 +131,15 @@ class Game extends BaseController
                 $json['user_balance'] = $updated_user_balance;
             }
 
+            //insert msg
+            $data2 = array(
+                'msg_from' => 'ADMIN',
+                'msg_user_id' => $userid,
+                'msg' => 'Your withdrawal is requested',
+            );
+            
+            $this->db->table('messages')->set($data2)->insert();
+
             $json['result'] = 200;
             return $this->response->setJSON($json);
         }

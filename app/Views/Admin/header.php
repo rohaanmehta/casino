@@ -25,19 +25,29 @@
   <link rel="stylesheet" href="public/plugins/daterangepicker/daterangepicker.css">
 
   <link rel="stylesheet" href="public/plugins/summernote/summernote-bs4.min.css">
+
+  <link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/toastify.css'); ?>">
+
   <style>
-    .pagination li{
+    .pagination li {
       width: 100%;
       padding: 10px 15px 10px 15px;
-      background-color:#c5c5c5;
-      color:#000;
-    }
-    .pagination li a{
-      color:#000 !important;
+      background-color: #c5c5c5;
+      color: #000;
     }
 
-    .pagination .active{
-      background-color:#7a7a7a !important;
+    .pagination li a {
+      color: #000 !important;
+    }
+
+    .pagination .active {
+      background-color: #7a7a7a !important;
+    }
+
+    @media screen and (max-width: 400px) {
+      .toastify {
+        font-size: 11px !important;
+      }
     }
   </style>
 </head>
@@ -97,7 +107,7 @@
               </a>
             </li>
             <li class="nav-item">
-              <a href="<?= base_url('admin_msgs')?>" class="nav-link">
+              <a href="<?= base_url('admin_msgs') ?>" class="nav-link">
                 <i class="nav-icon fas fa-comments"></i>
                 <p>
                   Messages
@@ -113,7 +123,7 @@
     </aside>
 
     <?= $this->renderSection('content') ?>
-    
+
     <footer class="main-footer">
       <strong>Copyright &copy; 2023 <a href="<?= base_url() ?>">Casino Corners </a>.</strong>
       All rights reserved.
@@ -162,6 +172,19 @@
   <script src="public/dist/js/demo.js"></script>
 
   <script src="public/dist/js/pages/dashboard.js"></script>
+
+  <script type="text/javascript" src="<?= base_url('/assets/js/toastify.js'); ?>"></script>
+  <script>
+    function toast(classname, msg) {
+      Toastify({
+        text: msg,
+        className: classname,
+        style: {
+          background: "linear-gradient(90deg, #a81a1a, #870de8)",
+        }
+      }).showToast();
+    }
+  </script>
 </body>
 
 </html>

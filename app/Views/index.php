@@ -564,10 +564,13 @@ if ($last_roll[0]['total'] % 2 == 0) {
                     <?php } ?>
                     <li><a class="dropdown-item my_modal" style='cursor:pointer' btn='activity_btn' data-bs-toggle="modal" data-bs-target="#exampleModal"><i class='mobile-feather-icon' style='color:#102d52;' data-feather="activity"></i> Activity</a></li>
                     <li><a class="dropdown-item my_modal" style='cursor:pointer' btn='fairness_btn' data-bs-toggle="modal" data-bs-target="#exampleModal"><i class='mobile-feather-icon' style='color:#102d52;' data-feather="clipboard"></i> Fairness</a></li>
-                    <li><a class="dropdown-item my_modal" style='cursor:pointer' btn='wallet_btn' data-bs-toggle="modal" data-bs-target="#exampleModal"><i class='mobile-feather-icon' style='color:#102d52;' data-feather="dollar-sign"></i> Deposit</a></li>
                     <li><a class="dropdown-item my_modal" style='cursor:pointer' btn='support_btn' data-bs-toggle="modal" data-bs-target="#exampleModal"><i class='mobile-feather-icon' style='color:#102d52;' data-feather="headphones"></i> Support</a></li>
-                    <li><a class="dropdown-item my_modal" style='cursor:pointer' btn='withdraw_btn' data-bs-toggle="modal" data-bs-target="#exampleModal"><i class='mobile-feather-icon' style='color:#102d52;' data-feather="credit-card"></i> Withdraw</a></li>
-                    <li><a class="dropdown-item my_modal" style='cursor:pointer' btn='transaction_btn' data-bs-toggle="modal" data-bs-target="#exampleModal"><i class='mobile-feather-icon' style='color:#102d52;' data-feather="edit"></i> Transactions</a></li>
+                    <?php if (isset($user_id) && !empty($user_id)) { ?>
+                        <li><a class="dropdown-item my_modal" style='cursor:pointer' btn='wallet_btn' data-bs-toggle="modal" data-bs-target="#exampleModal"><i class='mobile-feather-icon' style='color:#102d52;' data-feather="dollar-sign"></i> Deposit</a></li>
+                        <li><a class="dropdown-item my_modal" style='cursor:pointer' btn='withdraw_btn' data-bs-toggle="modal" data-bs-target="#exampleModal"><i class='mobile-feather-icon' style='color:#102d52;' data-feather="credit-card"></i> Withdraw</a></li>
+                        <li><a class="dropdown-item my_modal" style='cursor:pointer' btn='transaction_btn' data-bs-toggle="modal" data-bs-target="#exampleModal"><i class='mobile-feather-icon' style='color:#102d52;' data-feather="edit"></i> Transactions</a></li>
+                        <li><a class="dropdown-item my_modal" style='cursor:pointer' btn='message_btn' data-bs-toggle="modal" data-bs-target="#exampleModal"><i class='mobile-feather-icon' style='color:#102d52;' data-feather="message-square"></i> Messages</a></li>
+                    <?php } ?>
                     <?php if (isset($user_id) && !empty($user_id)) { ?>
                         <li><a class="dropdown-item" href="<?= base_url('logout') ?>"><i class='mobile-feather-icon' style='color:#102d52;' data-feather="log-out"></i> Logout</a></li>
                     <?php } ?>
@@ -694,9 +697,9 @@ if ($last_roll[0]['total'] % 2 == 0) {
                             <i class="fa fa-close" style="font-size:20px;color:#fff;"></i><br>
                         </button>
                     </div>
-                    <div class="modal-body" id='activity' style='display:none'>
-                        <div class='row p-4 table-responsive' style='max-height:300px;border-radius:10px;'>
-                            <table class='table table-bordered table-striped table-sm text-center' style='background:#10242a;color:#a3b0bb'>
+                    <div class="modal-body pt-2 pb-2" id='activity' style='display:none'>
+                        <div class='row pe-2 table-responsive' style='max-height:300px;border-radius:5px;'>
+                            <table class='m-0 table table-bordered table-striped table-sm text-center' style='background:#10242a;color:#a3b0bb'>
                                 <thead>
                                     <th class='mobile-font'>Date</th>
                                     <th class='mobile-font'>Total</th>
@@ -720,9 +723,33 @@ if ($last_roll[0]['total'] % 2 == 0) {
                             </table>
                         </div>
                     </div>
-                    <div class="modal-body" id='transaction' style='display:none'>
-                        <div class='row p-4 pt-2 pb-1 table-responsive' style='max-height:300px;border-radius:10px;'>
-                            <table class='table table-bordered table-striped table-sm text-center' style='background:#10242a;color:#a3b0bb'>
+                    <div class="modal-body pt-2 pb-2" id='message' style='display:none'>
+                        <div class='row pe-2 table-responsive' style='max-height:300px;border-radius:5px;'>
+                            <table class='m-0 table table-bordered table-striped table-sm text-center' style='background:#10242a;color:#a3b0bb'>
+                                <thead>
+                                    <th class='mobile-font'>Date</th>
+                                    <th class='mobile-font'>Message</th>
+                                </thead>
+                                <tbody>
+                                    <?php if (isset($messages) && !empty($messages)) {
+                                        foreach ($messages as $msg) { ?>
+                                            <tr>
+                                                <td style='color:#a3b0bb' class='mobile-font'><?= date('d-m-Y', strtotime($msg['created_date'])) ?></td>
+                                                <td style='color:#a3b0bb' class='mobile-font'><?= $msg['msg']; ?></td>
+                                            </tr>
+                                        <?php }
+                                    } else { ?>
+                                        <tr>
+                                            <td style='color:#a3b0bb' class='text-align mobile-font' colspan='2'>No messages</td>
+                                        </tr>
+                                    <?php } ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="modal-body pt-2 pb-2" id='transaction' style='display:none'>
+                        <div class='row pe-2 table-responsive' style='max-height:300px;border-radius:5px;'>
+                            <table class='m-0 table table-bordered table-striped table-sm text-center' style='background:#10242a;color:#a3b0bb'>
                                 <thead>
                                     <th class='mobile-font'>Type</th>
                                     <th class='mobile-font'>Amount</th>
@@ -991,6 +1018,7 @@ if ($last_roll[0]['total'] % 2 == 0) {
                     $('#user-edit').css('display', 'none');
                     $('#withdraw').css('display', 'none');
                     $('#transaction').css('display', 'none');
+                    $('#message').css('display', 'none');
                     $('.modal-title').html('Login');
                     // alert();
                 <?php } else { ?>
@@ -1145,6 +1173,7 @@ if ($last_roll[0]['total'] % 2 == 0) {
                     $('#withdraw').css('display', 'none');
                     $('#transaction').css('display', 'none');
                     $('#user-edit').css('display', 'none');
+                    $('#message').css('display', 'none');
                 }
                 if ($(this).attr('btn') == 'fairness_btn') {
                     $('#activity').css('display', 'none');
@@ -1158,6 +1187,7 @@ if ($last_roll[0]['total'] % 2 == 0) {
                     $('#withdraw').css('display', 'none');
                     $('#transaction').css('display', 'none');
                     $('#user-edit').css('display', 'none');
+                    $('#message').css('display', 'none');
                 }
                 if ($(this).attr('btn') == 'support_btn') {
                     <?php if (isset($user_id) && !empty($user_id)) { ?>
@@ -1172,6 +1202,7 @@ if ($last_roll[0]['total'] % 2 == 0) {
                         $('#withdraw').css('display', 'none');
                         $('#transaction').css('display', 'none');
                         $('#user-edit').css('display', 'none');
+                        $('#message').css('display', 'none');
                     <?php } else { ?>
                         $('#activity').css('display', 'none');
                         $('#fairness').css('display', 'none');
@@ -1183,6 +1214,7 @@ if ($last_roll[0]['total'] % 2 == 0) {
                         $('#support').css('display', 'none');
                         $('#withdraw').css('display', 'none');
                         $('#transaction').css('display', 'none');
+                        $('#message').css('display', 'none');
                         $('.modal-title').html('Login');
                     <?php } ?>
                 }
@@ -1198,6 +1230,7 @@ if ($last_roll[0]['total'] % 2 == 0) {
                     $('#withdraw').css('display', 'none');
                     $('#transaction').css('display', 'none');
                     $('#user-edit').css('display', 'none');
+                    $('#message').css('display', 'none');
                 }
                 if ($(this).attr('id') == 'login_btn') {
                     $('#activity').css('display', 'none');
@@ -1211,6 +1244,7 @@ if ($last_roll[0]['total'] % 2 == 0) {
                     $('.modal-title').html('Login');
                     $('#withdraw').css('display', 'none');
                     $('#transaction').css('display', 'none');
+                    $('#message').css('display', 'none');
                 }
                 if ($(this).attr('btn') == 'withdraw_btn') {
                     <?php if (isset($user_id) && !empty($user_id)) { ?>
@@ -1225,6 +1259,7 @@ if ($last_roll[0]['total'] % 2 == 0) {
                         $('#user-edit').css('display', 'none');
                         $('#transaction').css('display', 'none');
                         $('.modal-title').html('Withdraw');
+                        $('#message').css('display', 'none');
                     <?php } else { ?>
                         $('#activity').css('display', 'none');
                         $('#fairness').css('display', 'none');
@@ -1237,6 +1272,7 @@ if ($last_roll[0]['total'] % 2 == 0) {
                         $('#withdraw').css('display', 'none');
                         $('#transaction').css('display', 'none');
                         $('.modal-title').html('Login');
+                        $('#message').css('display', 'none');
                     <?php } ?>
                 }
                 if ($(this).attr('btn') == 'wallet_btn') {
@@ -1252,6 +1288,7 @@ if ($last_roll[0]['total'] % 2 == 0) {
                         $('#register').css('display', 'none');
                         $('#login').css('display', 'none');
                         $('.modal-title').html('Deposit');
+                        $('#message').css('display', 'none');
                     <?php } else { ?>
                         $('#activity').css('display', 'none');
                         $('#fairness').css('display', 'none');
@@ -1264,6 +1301,7 @@ if ($last_roll[0]['total'] % 2 == 0) {
                         $('#withdraw').css('display', 'none');
                         $('#transaction').css('display', 'none');
                         $('.modal-title').html('Login');
+                        $('#message').css('display', 'none');
                     <?php } ?>
                 }
 
@@ -1280,6 +1318,7 @@ if ($last_roll[0]['total'] % 2 == 0) {
                         $('#register').css('display', 'none');
                         $('#login').css('display', 'none');
                         $('.modal-title').html('User Details');
+                        $('#message').css('display', 'none');
                     <?php } else { ?>
                         $('#activity').css('display', 'none');
                         $('#fairness').css('display', 'none');
@@ -1292,6 +1331,7 @@ if ($last_roll[0]['total'] % 2 == 0) {
                         $('#withdraw').css('display', 'none');
                         $('#transaction').css('display', 'none');
                         $('.modal-title').html('Login');
+                        $('#message').css('display', 'none');
                     <?php } ?>
                 }
 
@@ -1308,6 +1348,7 @@ if ($last_roll[0]['total'] % 2 == 0) {
                         $('#register').css('display', 'none');
                         $('#login').css('display', 'none');
                         $('.modal-title').html('Transactions');
+                        $('#message').css('display', 'none');
                     <?php } else { ?>
                         $('#transaction').css('display', 'none');
                         $('#activity').css('display', 'none');
@@ -1320,6 +1361,37 @@ if ($last_roll[0]['total'] % 2 == 0) {
                         $('#support').css('display', 'none');
                         $('#withdraw').css('display', 'none');
                         $('.modal-title').html('Login');
+                        $('#message').css('display', 'none');
+                    <?php } ?>
+                }
+
+                if ($(this).attr('btn') == 'message_btn') {
+                    <?php if (isset($user_id) && !empty($user_id)) { ?>
+                        $('#activity').css('display', 'none');
+                        $('#fairness').css('display', 'none');
+                        $('#settings').css('display', 'none');
+                        $('#wallet').css('display', 'none');
+                        $('#user-edit').css('display', 'none');
+                        $('#transaction').css('display', 'none');
+                        $('#withdraw').css('display', 'none');
+                        $('#support').css('display', 'none');
+                        $('#register').css('display', 'none');
+                        $('#login').css('display', 'none');
+                        $('.modal-title').html('Messages');
+                        $('#message').css('display', 'block');
+                    <?php } else { ?>
+                        $('#transaction').css('display', 'none');
+                        $('#activity').css('display', 'none');
+                        $('#fairness').css('display', 'none');
+                        $('#settings').css('display', 'none');
+                        $('#user-edit').css('display', 'none');
+                        $('#wallet').css('display', 'none');
+                        $('#register').css('display', 'none');
+                        $('#login').css('display', 'block');
+                        $('#support').css('display', 'none');
+                        $('#withdraw').css('display', 'none');
+                        $('.modal-title').html('Login');
+                        $('#message').css('display', 'none');
                     <?php } ?>
                 }
             });

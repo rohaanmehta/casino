@@ -33,13 +33,27 @@
                             <th class='tr_col' column='with_status'>Status</th>
                         </thead>
                         <tbody>
-                            <?php if (isset($withdraw) && !empty($withdraw) && sizeof($withdraw) > 0 ) {
+                            <?php if (isset($withdraw) && !empty($withdraw) && sizeof($withdraw) > 0) {
                                 foreach ($withdraw as $row) { ?>
                                     <tr>
                                         <td><?= $row['user_name'] ?></td>
                                         <td><?= $row['with_user_amount'] ?></td>
                                         <td><?= date('d-m-Y H:i:s', strtotime($row['created_at'])) ?></td>
-                                        <td><button with_id='<?= $row['id'] ?>' class='status btn btn-primary'><?= $row['with_status'] ?></button></td>
+                                        <td>
+                                            <select userid='<?= $row['with_user_id']?>' <?php if ($row['with_status'] == "REJECTED" || $row['with_status'] == "COMPLETED") {
+                                                        echo "disabled";
+                                                    } ?> with_id='<?= $row['id'] ?>' class='form-control withdraw-status'>
+                                                <option value='PENDING' <?php if ($row['with_status'] == "PENDING") {
+                                                                            echo "selected";
+                                                                        } ?>>PENDING</option>
+                                                <option value='COMPLETED' <?php if ($row['with_status'] == "COMPLETED") {
+                                                                                echo "selected";
+                                                                            } ?>>COMPLETED</option>
+                                                <option value='REJECTED' <?php if ($row['with_status'] == "REJECTED") {
+                                                                                echo "selected";
+                                                                            } ?>>REJECTED</option>
+                                            </select>
+                                        </td>
                                     </tr>
                                 <?php }
                             } else { ?>
@@ -70,6 +84,33 @@
 
         $('.tr_col').click(function() {
             window.location.href = '<?= base_url('admin_withdraw?column=') ?>' + $(this).attr('column');
+        });
+
+        $('.withdraw-status').change(function() {
+            var id = $(this).attr('with_id');
+            var userid = $(this).attr('userid');
+            $.ajax({
+                type: "POST",
+                url: "<?= base_url('withdraw_status') ?>",
+                data: {
+                    id: id,
+                    userid: userid,
+                    status: $(this).val(),
+                },
+                cache: false,
+                dataType: "json",
+                success: function(data) {
+
+                    if (data.result == 200) {
+                        toast('info', 'Status Updated !');
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 2000);
+                    } else {
+                        toast('info', 'Something went wrong !');
+                    }
+                }
+            });
         });
     })
 </script>

@@ -52,6 +52,8 @@ $routes->group("/", ["filter" => "auth"], function ($routes) {
     $routes->get('admin_deposits', 'Dashboard::deposit');
     $routes->get('admin_withdraw', 'Dashboard::withdraw');
     $routes->get('admin_msgs', 'Dashboard::msgs');
+    $routes->post('withdraw_status', 'Dashboard::withdraw_status');
+    $routes->post('reply_to_user', 'Dashboard::reply_to_user');
 });
 
 /*
